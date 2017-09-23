@@ -1,26 +1,52 @@
-FROM alpine:3.6
+FROM ubuntu:xenial-20170915
+MAINTAINER Koki Takahashi <hakatasiloving@gmail.com>
 
-RUN apk update && \
-    apk upgrade && \
-    apk add --update git clang cmake musl-dev m4 make ncurses-dev
+RUN sed -i.bak -e "s%http://archive.ubuntu.com/ubuntu/%http://ftp.jaist.ac.jp/pub/Linux/ubuntu/%g" /etc/apt/sources.list
 
-RUN apk add --update gcc
+RUN apt update -y && \
+    apt upgrade && \
+    apt install -y software-properties-common
 
-# Install csh
+RUN add-apt-repository ppa:saltmakrell/ppa
+
+RUN apt update -y && \
+    apt install -y git clang csh cmake m4 yosys
+
+# Install magic
 RUN cd /root && \
-    git clone --depth 1 https://github.com/tcsh-org/tcsh.git && \
-    cd tcsh && \
+    git clone --depth 1 git://opencircuitdesign.com/magic-8.1 && \
+    cd magic-8.1 && \
     ./configure && \
     make && \
     make install
 
+# Install graywolf
 RUN cd /root && \
-    git clone --depth 1 git://opencircuitdesign.com/magic-8.1 && \
-    cd magic-8.1 && \
-    sed -i -e 's/#!\/bin\/csh -f/#!\/usr\/bin\/env tcsh/' scripts/makedbh && \
-    ./configure && \
-    make
+    apt install -y libgsl-dev pkg-config libx11-dev && \
+    git clone --depth 1 https://github.com/rubund/graywolf && \
+    cd graywolf && \
+    cmake . && \
+    make > /dev/null && \
+    make install
 
-WORKDIR /
+# Install qrouter
+RUN cd /root && \
+    apt install -y tk-dev && \
+    git clone --depth 1 git://opencircuitdesign.com/qrouter-1.3 && \
+    cd qrouter-1.3 && \
+    ./configure && \
+    make && \
+    make install
+
+# Install QFlow
+RUN cd /root && \
+    apt install -y tcsh && \
+    git clone --depth 1 git://opencircuitdesign.com/qflow-1.1 && \
+    cd qflow-1.1 && \
+    ./configure && \
+    make && \
+    make install
+
+WORKDIR /root
 
 CMD ["qflow"]
