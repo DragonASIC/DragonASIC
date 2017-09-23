@@ -1,0 +1,90 @@
+.info-area {
+	flex: 0 1 300px;
+	background-color: #19151A;
+
+	display: flex;
+	flex-direction: column;
+}
+
+.logo-area {
+	background-color: #3D3339;
+	flex: 0 0 60px;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	img {
+		width: 70%;
+	}
+}
+
+.info {
+	flex: 1 0 0;
+	overflow-y: auto;
+}
+
+.head {
+	font-size: 22px;
+	padding: 0.5em;
+}
+
+.togglable-head {
+	font-size: 18px;
+	position: relative;
+	padding-left: 1.5em;
+	margin: 10px 0;
+	cursor: pointer;
+
+	&::before {
+		position: absolute;
+		left: 0.5em;
+		top: 50%;
+		transform: translateY(-50%);
+
+		$size: 5px;
+
+		content: '';
+
+		width: 0;
+		height: 0;
+		border-left: white solid $size;
+		border-top: transparent solid $size;
+		border-bottom: transparent solid $size;
+	}
+
+	&.active::before {
+		transform: translateY(-50%) rotate(90deg);
+	}
+}
+
+.forwarding-config {
+	display: flex;
+	height: 30px;
+	line-height: 30px;
+	padding: 5px 10px;
+
+	label {
+		flex: 0 0 30%;
+	}
+
+	input {
+		flex: 1 0 0;
+		min-width: 0;
+		width: 0;
+		background-color: #3B3B3B;
+		color: white;
+		border: none;
+		border-radius: 3px;
+		padding: 0 0.5em;
+	}
+}
+
+.preview {
+	width: 280px;
+	overflow-wrap: break-word;
+	font-family: monospace;
+	background-color: black;
+	padding: 0.5em;
+	margin: 10px auto;
+}
