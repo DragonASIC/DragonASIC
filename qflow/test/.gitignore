@@ -1,0 +1,5 @@
+*
+!.gitignore
+!synthesis/.gitkeep
+!layout/.gitkeep
+!source/map9v3.v
