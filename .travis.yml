@@ -23,7 +23,7 @@ install:
 
 script:
   - yarn lint
-  - yarn build:web:build
+  - yarn build:web
 
 # after_success:
 #   - bash web/bin/deploy.sh
