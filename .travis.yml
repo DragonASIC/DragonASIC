@@ -17,18 +17,16 @@ addons:
     packages:
       - yarn
 
-# yarn upgrade will also install missing packages as well
 install:
-  # Yarn needs lockfile to exist even if --no-lockfile option is provided. So... fake lockfile *puke*
-  - touch yarn.lock
-  - yarn upgrade --no-lockfile
+  - yarn install
+  - yarn upgrade
 
 script:
   - yarn lint
-  - yarn build
+  - yarn build:web:build
 
-after_success:
-  - bash bin/deploy.sh
+# after_success:
+#   - bash web/bin/deploy.sh
 
 cache:
   yarn: true

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# NOTE: This script is Work in Progress and not ready for use.
+
 # Exit on error
 set -ev
 
@@ -16,4 +18,4 @@ git symbolic-ref HEAD refs/heads/gh-pages
 git checkout fef0b9b1f882c1817ac2f16b07eceaa1f9c56ce7 .gitignore
 git add --all
 git commit -m "Update build - ${TRAVIS_COMMIT}"
-git push "https://${GH_TOKEN}@github.com/hakatashi/DragonASIC-web.git" gh-pages:gh-pages --follow-tags > /dev/null 2>&1
+git push "https://${GH_TOKEN}@github.com/hakatashi/DragonASIC.git" gh-pages:gh-pages --follow-tags > /dev/null 2>&1
