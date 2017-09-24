@@ -1,15 +1,15 @@
 {
-  "name": "DragonASIC-web",
+  "name": "DragonASIC",
   "version": "1.0.0",
   "scripts": {
-    "build": "concurrently \"npm run html\" \"npm run js\"",
-    "html": "pug index.pug",
-    "js": "webpack",
-    "lint": "eslint . --ignore-pattern index.js",
-    "dev": "webpack-dev-server"
+    "build:web": "concurrently \"npm run build:web:html\" \"npm run build:web:js\"",
+    "build:web:html": "pug web/index.pug",
+    "build:web:js": "cd web && webpack",
+    "lint": "eslint . --ignore-pattern web/index.js",
+    "dev:web": "cd web && webpack-dev-server"
   },
-  "main": "index.js",
-  "author": "Koki Takahashi <hakatasiloving@gmail.com>",
+  "main": "api/index.js",
+  "author": "DragonASIC",
   "license": "MIT",
   "devDependencies": {
     "@hakatashi/eslint-config": "^1.1.0",

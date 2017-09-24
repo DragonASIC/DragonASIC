@@ -59,7 +59,7 @@ typings/
 .env
 
 *.sw[op]
-index.html
-index.js
-index.js.map
-index.css
+web/index.html
+web/index.js
+web/index.js.map
+web/index.css
