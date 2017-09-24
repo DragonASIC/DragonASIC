@@ -5,6 +5,7 @@
     "build:web": "concurrently \"npm run build:web:html\" \"npm run build:web:js\"",
     "build:web:html": "pug web/index.pug",
     "build:web:js": "cd web && webpack",
+    "api": "node api/index.js",
     "lint": "eslint . --ignore-pattern web/index.js",
     "dev:web": "cd web && webpack-dev-server"
   },
@@ -44,5 +45,9 @@
     "svg-path-generator": "^1.1.0",
     "webpack": "^3.1.0",
     "webpack-dev-server": "^2.5.1"
+  },
+  "dependencies": {
+    "koa": "^2.3.0",
+    "koa-route": "^3.2.0"
   }
 }
