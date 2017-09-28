@@ -7,7 +7,8 @@
     "build:web:js": "cd web && webpack",
     "api": "node api/index.js",
     "lint": "eslint . --ignore-pattern web/index.js",
-    "dev:web": "cd web && webpack-dev-server"
+    "dev:web": "cd web && webpack-dev-server",
+    "dev": "concurrently \"npm run dev:web\" \"npm run api\""
   },
   "main": "api/index.js",
   "author": "DragonASIC",
@@ -28,6 +29,7 @@
     "css-loader": "^0.28.4",
     "eslint": "^4.1.0",
     "eslint-plugin-react": "^7.1.0",
+    "fetch-ponyfill": "^4.1.0",
     "github-fork-ribbon-css": "^0.2.1",
     "hammerjs": "^2.0.8",
     "normalize.css": "^7.0.0",

@@ -4,6 +4,7 @@ const {default: AceEditor} = require('react-ace');
 const {stripIndent} = require('common-tags');
 const InfoArea = require('./InfoArea.jsx');
 const styles = require('./App.pcss');
+const api = require('./api.js');
 
 require('brace/mode/c_cpp');
 require('brace/theme/monokai');
@@ -22,6 +23,16 @@ class App extends React.Component {
 				}
 			`,
 		};
+
+		this.code = '';
+	}
+
+	handleClickRun = (event) => {
+		console.log(this.code);
+	}
+
+	handleChangeAceEditor = (code) => {
+		this.code = code;
 	}
 
 	render() {
@@ -29,6 +40,9 @@ class App extends React.Component {
 			<div styleName="app">
 				<InfoArea/>
 				<div styleName="editor-area">
+					<div styleName="editor-head">
+						<button styleName="run" onClick={this.handleClickRun}/>
+					</div>
 					<AceEditor
 						mode="c_cpp"
 						theme="monokai"
@@ -37,6 +51,7 @@ class App extends React.Component {
 						width="100%"
 						height="100%"
 						value={this.state.code}
+						onChange={this.handleChangeAceEditor}
 					/>
 				</div>
 				<div styleName="sensor-area">
