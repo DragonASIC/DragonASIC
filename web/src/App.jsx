@@ -22,13 +22,15 @@ class App extends React.Component {
 					return 0;
 				}
 			`,
+			isRunning: false,
 		};
 
 		this.code = '';
 	}
 
-	handleClickRun = (event) => {
-		console.log(this.code);
+	handleClickRun = () => {
+		this.setState({isRunning: true});
+		api.post('/generate', {code: this.code});
 	}
 
 	handleChangeAceEditor = (code) => {
@@ -41,7 +43,19 @@ class App extends React.Component {
 				<InfoArea/>
 				<div styleName="editor-area">
 					<div styleName="editor-head">
-						<button styleName="run" onClick={this.handleClickRun}/>
+						{this.state.isRunning ? (
+							<div styleName="spinner">
+								<div styleName="sk-wave" className="sk-wave">
+									<div styleName="sk-rect" className="sk-rect sk-rect1"/>
+									<div styleName="sk-rect" className="sk-rect sk-rect2"/>
+									<div styleName="sk-rect" className="sk-rect sk-rect3"/>
+									<div styleName="sk-rect" className="sk-rect sk-rect4"/>
+									<div styleName="sk-rect" className="sk-rect sk-rect5"/>
+								</div>
+							</div>
+						) : (
+							<button styleName="run" onClick={this.handleClickRun}/>
+						)}
 					</div>
 					<AceEditor
 						mode="c_cpp"

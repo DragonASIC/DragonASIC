@@ -43,6 +43,7 @@
     "react-dom": "^15.6.1",
     "react-hammerjs": "^0.5.0",
     "react-measure": "^2.0.2",
+    "spinkit": "^1.2.5",
     "style-loader": "^0.18.2",
     "svg-path-generator": "^1.1.0",
     "webpack": "^3.1.0",
@@ -51,7 +52,9 @@
   "dependencies": {
     "colors": "^1.1.2",
     "dockerode": "^2.5.1",
+    "kcors": "2",
     "koa": "^2.3.0",
+    "koa-logger": "^3.1.0",
     "koa-route": "^3.2.0",
     "tmp": "^0.0.33"
   }
