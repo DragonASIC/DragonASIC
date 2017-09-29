@@ -13,6 +13,42 @@
 		flex: 4 0 0;
 	}
 
+	.editor-head {
+		height: 30px;
+		background-color: #1b2121;
+
+		display: flex;
+		justify-content: flex-end;
+	}
+
+	button.run {
+		position: relative;
+		width: 30px;
+		height: 30px;
+		border: none;
+		outline: none;
+		background: none;
+		padding: 0;
+		cursor: pointer;
+
+		&::before {
+			content: '';
+
+			$size: 20px;
+
+			width: 0;
+			height: 0;
+			border-top: calc($size * 0.5) solid transparent;
+			border-left: calc($size * 0.866) solid green;
+			border-bottom: calc($size * 0.5) solid transparent;
+
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
+	}
+
 	.sensor-area {
 		flex: 2 0 0;
 		background-color: #1B2121;
