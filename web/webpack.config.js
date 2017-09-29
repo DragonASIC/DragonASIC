@@ -16,6 +16,7 @@ module.exports = {
 							targets: [
 								'last 2 Chrome versions',
 							],
+							useBuiltIns: 'entry',
 						}],
 						'react',
 					],

@@ -28,9 +28,11 @@ class App extends React.Component {
 		this.code = '';
 	}
 
-	handleClickRun = () => {
+	handleClickRun = async () => {
 		this.setState({isRunning: true});
-		api.post('/generate', {code: this.code});
+		const data = await api.post('/generate', {code: this.code});
+		console.log(data.data);
+		this.setState({isRunning: false});
 	}
 
 	handleChangeAceEditor = (code) => {

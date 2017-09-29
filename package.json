@@ -6,9 +6,10 @@
     "build:web:html": "pug web/index.pug",
     "build:web:js": "cd web && webpack",
     "api": "node api/index.js",
+    "dev:api": "nodemon api/index.js",
     "lint": "eslint . --ignore-pattern web/index.js",
     "dev:web": "cd web && webpack-dev-server",
-    "dev": "concurrently \"npm run dev:web\" \"npm run api\""
+    "dev": "concurrently \"npm run dev:web\" \"npm run dev:api\""
   },
   "main": "api/index.js",
   "author": "DragonASIC",
@@ -20,6 +21,7 @@
     "babel-eslint": "^7.2.3",
     "babel-loader": "^7.0.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.5.2",
     "babel-preset-react": "^6.24.1",
     "brace": "^0.10.0",
@@ -32,6 +34,7 @@
     "fetch-ponyfill": "^4.1.0",
     "github-fork-ribbon-css": "^0.2.1",
     "hammerjs": "^2.0.8",
+    "nodemon": "^1.12.1",
     "normalize.css": "^7.0.0",
     "postcss-flexbugs-fixes": "^3.0.0",
     "postcss-loader": "^2.0.6",
