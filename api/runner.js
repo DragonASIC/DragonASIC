@@ -106,7 +106,6 @@ module.exports = async ({code}) => {
 		}
 	});
 
-
 	const data = await promisify(fs.readFile)(path.join(tmpPath, 'layout', 'map9v3.def'));
 
 	cleanup();
