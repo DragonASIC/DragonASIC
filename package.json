@@ -54,6 +54,7 @@
   },
   "dependencies": {
     "colors": "^1.1.2",
+    "concat-stream": "^1.6.0",
     "dockerode": "^2.5.1",
     "kcors": "2",
     "koa": "^2.3.0",

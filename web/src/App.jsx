@@ -22,6 +22,7 @@ class App extends React.Component {
 					return 0;
 				}
 			`,
+			stdout: '',
 			isRunning: false,
 		};
 
@@ -30,9 +31,25 @@ class App extends React.Component {
 
 	handleClickRun = async () => {
 		this.setState({isRunning: true});
-		const data = await api.post('/generate', {code: this.code});
-		console.log(data.data);
-		this.setState({isRunning: false});
+		try {
+			const data = await api.post('/generate', {code: this.code});
+			this.setState({stdout: data.stdout});
+
+			const element = document.createElement('a');
+			element.setAttribute('href', `data:text/plain;charset=utf-8,${encodeURIComponent(data.data)}`);
+			element.setAttribute('download', 'layout.def');
+
+			element.style.display = 'none';
+			document.body.appendChild(element);
+
+			element.click();
+
+			document.body.removeChild(element);
+		} catch (e) {
+			console.error(e);
+		} finally {
+			this.setState({isRunning: false});
+		}
 	}
 
 	handleChangeAceEditor = (code) => {
@@ -42,7 +59,7 @@ class App extends React.Component {
 	render() {
 		return (
 			<div styleName="app">
-				<InfoArea/>
+				<InfoArea preview={this.state.stdout}/>
 				<div styleName="editor-area">
 					<div styleName="editor-head">
 						{this.state.isRunning ? (
