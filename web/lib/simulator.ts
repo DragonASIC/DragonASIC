@@ -14,17 +14,17 @@ class CPUState {
     this.ProgramCounter =  0;
     this.Halt = 0;
   }
+
+  readProgram(data: number[]) {
+  }
 }
 
 function getInitialState() {
   return new CPUState();
 }
 
-function readProgram(state, binary) {
-
-}
-
-function step(state) {
+function step(state: CPUState): CPUState {
+  return state;
 }
 
 function getStatus(state: CPUState, num: number) {
