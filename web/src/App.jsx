@@ -5,6 +5,7 @@ const {stripIndent} = require('common-tags');
 const InfoArea = require('./InfoArea.jsx');
 const styles = require('./App.pcss');
 const api = require('./api.js');
+const simulator = require('../lib/simulator.ts');
 
 require('brace/mode/c_cpp');
 require('brace/theme/monokai');

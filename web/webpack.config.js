@@ -7,7 +7,7 @@ module.exports = {
 	devtool: 'cheap-module-eval-source-map',
 	module: {
 		rules: [{
-			test: /\.jsx$/,
+			test: /\.jsx?$/,
 			use: {
 				loader: 'babel-loader',
 				options: {
@@ -25,7 +25,7 @@ module.exports = {
 					],
 				},
 			},
-			exclude: /node_modules\/(?!react-measure)/,
+			exclude: /node_modules/,
 		}, {
 			test: /\.pcss$/,
 			use: [{
@@ -46,6 +46,12 @@ module.exports = {
 					sourceMap: true,
 				},
 			}],
+		}, {
+			test: /\.ts$/,
+			use: {
+				loader: 'ts-loader',
+			},
+			exclude: /node_modules/,
 		}],
 	},
 };
