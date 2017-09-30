@@ -1,11 +1,13 @@
 const React = require('react');
-const CSS = require('react-css-modules');
 const {default: AceEditor} = require('react-ace');
 const {stripIndent} = require('common-tags');
 const InfoArea = require('./InfoArea.jsx');
-const styles = require('./App.pcss');
 const api = require('./api.js');
 const simulator = require('../lib/simulator.ts');
+
+// fmm...
+// https://github.com/gajus/babel-plugin-react-css-modules/issues/38#issuecomment-310890776
+import './App.pcss';
 
 require('brace/mode/c_cpp');
 require('brace/theme/monokai');
@@ -108,4 +110,4 @@ class App extends React.Component {
 	}
 }
 
-module.exports = CSS(App, styles, {allowMultiple: true, handleNotFoundStyleName: 'log'});
+module.exports = App;

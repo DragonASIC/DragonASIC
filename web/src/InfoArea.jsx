@@ -1,7 +1,9 @@
 const React = require('react');
-const CSS = require('react-css-modules');
-const styles = require('./InfoArea.pcss');
 const classNames = require('classnames');
+
+// fmm...
+// https://github.com/gajus/babel-plugin-react-css-modules/issues/38#issuecomment-310890776
+import './InfoArea.pcss';
 
 require('brace/mode/c_cpp');
 require('brace/theme/monokai');
@@ -82,4 +84,4 @@ class InfoArea extends React.Component {
 	}
 }
 
-module.exports = CSS(InfoArea, styles, {allowMultiple: true, handleNotFoundStyleName: 'log'});
+module.exports = InfoArea;

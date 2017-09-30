@@ -24,6 +24,15 @@ module.exports = {
 						'react',
 					],
 					plugins: [
+						['react-css-modules', {
+							filetypes: {
+								'.pcss': {
+									syntax: 'postcss',
+								},
+							},
+							handleMissingStyleName: 'warn',
+							generateScopedName: '[name]__[local]--[hash:base64:5]',
+						}],
 						'transform-class-properties',
 					],
 				},
