@@ -4,7 +4,7 @@ module.exports = {
 		path: __dirname,
 		filename: 'index.js',
 	},
-	devtool: 'cheap-module-eval-source-map',
+	devtool: 'source-map',
 	module: {
 		rules: [{
 			test: /\.jsx?$/,
@@ -13,10 +13,13 @@ module.exports = {
 				options: {
 					presets: [
 						['env', {
-							targets: [
-								'last 2 Chrome versions',
-							],
+							targets: {
+								browsers: [
+									'last 2 chrome versions',
+								],
+							},
 							useBuiltIns: 'entry',
+							debug: true,
 						}],
 						'react',
 					],
