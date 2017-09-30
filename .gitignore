@@ -63,3 +63,6 @@ web/index.html
 web/index.js
 web/index.js.map
 web/index.css
+
+# lock file of npm
+package-lock.json
