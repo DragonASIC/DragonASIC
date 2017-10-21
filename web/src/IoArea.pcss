@@ -1,0 +1,95 @@
+.io-area {
+	flex: 4 0 0;
+	background-color: #e8e8e8;
+	border-left: 2px solid lightgray;
+
+	display: flex;
+}
+
+.list {
+	flex: 1 0 0;
+}
+
+.detail {
+	flex: 1 0 0;
+	background: #494756;
+	border-left: 2px solid lightgray;
+
+	ul {
+		padding: 0;
+		margin: 0 20px;
+		font-size: 18px;
+
+		li {
+			display: flex;
+			margin: 12px 5px;
+			list-style: none;
+
+			.item {
+				flex: 0 0 30%;
+				color: lightgray;
+			}
+
+			.value {
+				flex: 1 0 0;
+			}
+		}
+	}
+}
+
+.head {
+	font-size: 30px;
+	font-weight: bold;
+	padding-left: 0.5em;
+	margin: 0.3em 0;
+}
+
+.sensor {
+	margin: 10px;
+	border-radius: 3px;
+	background: #494756;
+	padding: 0.1em;
+
+
+	&:last-child {
+		border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+	}
+}
+
+.sensor-head {
+	font-size: 18px;
+	position: relative;
+	padding-left: 1.2em;
+	margin: 10px 0;
+	cursor: pointer;
+
+	&::before {
+		position: absolute;
+		left: 0.5em;
+		top: 50%;
+		transform: translateY(-50%);
+
+		$size: 5px;
+
+		content: '';
+
+		width: 0;
+		height: 0;
+		border-left: white solid $size;
+		border-top: transparent solid $size;
+		border-bottom: transparent solid $size;
+	}
+
+	&.active::before {
+		transform: translateY(-50%) rotate(90deg);
+	}
+}
+
+.button {
+	border-radius: 3px;
+	background: #156bb7;
+	margin: 20px;
+	padding: 0.5em;
+	color: rgba(255, 255, 255, 0.66);
+	cursor: pointer;
+}

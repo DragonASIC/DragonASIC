@@ -14,28 +14,48 @@
 	}
 
 	.editor-head {
-		height: 30px;
-		background-color: #1b2121;
+		height: 45px;
+		background-color: #b6b9b9;
 
 		display: flex;
-		justify-content: flex-end;
+		justify-content: space-between;
+	}
+
+	.tabs {
+		display: flex;
+
+		.tab {
+			background: lightgray;
+			border-left: 1px solid gray;
+			border-top: 1px solid gray;
+			border-right: 1px solid gray;
+			color: dimgray;
+			display: flex;
+			align-items: center;
+			padding: 0 1em;
+			cursor: pointer;
+
+			&.active {
+				background: white;
+			}
+		}
 	}
 
 	button.run {
 		position: relative;
-		width: 30px;
-		height: 30px;
+		width: 45px;
+		height: 45px;
 		cursor: pointer;
 
 		&::before {
 			content: '';
 
-			$size: 20px;
+			$size: 30px;
 
 			width: 0;
 			height: 0;
 			border-top: calc($size * 0.5) solid transparent;
-			border-left: calc($size * 0.866) solid green;
+			border-left: calc($size * 0.866) solid #81ff81;
 			border-bottom: calc($size * 0.5) solid transparent;
 
 			position: absolute;
@@ -65,51 +85,62 @@
 		width: 3px !important; /* FIXME */
 	}
 
-	.sensor-area {
-		flex: 2 0 0;
-		background-color: #1B2121;
-	}
+	.build {
+		display: flex;
+		padding: 12px;
+		color: #333;
+		height: 100%;
+		overflow-y: auto;
 
-	.sensor {
-		border-top: 1px solid rgba(255, 255, 255, 0.5);
-		overflow: hidden;
+		.head {
+			font-size: 20px;
+			font-weight: bold;
+			padding-left: 0.5em;
+			margin: 0.3em 0;
+		}
 
-		&:last-child {
-			border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+		.stdout {
+			background: #383838;
+			min-height: 3em;
+			margin: 0 0.5em;
+			color: white;
+			border-radius: 3px;
+			padding: 1em;
+			font-size: 12px;
+			white-space: pre-wrap;
+			font-family: monospace;
+			overflow-x: auto;
+			width: 300px;
+		}
+
+		.pin {
+			margin: 0 1em;
+			height: 10em;
+			background: lightgray;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.download {
+			display: block;
+			margin: 2em auto;
+			width: 80%;
+			text-align: center;
+			font-size: 20px;
+			color: white;
+			border-radius: 8px;
+			padding: 1em 0;
+			background: lightgray;
+			text-decoration: none;
+
+			&.active {
+				background: mediumaquamarine;
+			}
 		}
 	}
 
-	.sensor-head {
-		font-size: 18px;
-		position: relative;
-		padding-left: 1.2em;
-		margin: 10px 0;
-		cursor: pointer;
-
-		&::before {
-			position: absolute;
-			left: 0.5em;
-			top: 50%;
-			transform: translateY(-50%);
-
-			$size: 5px;
-
-			content: '';
-
-			width: 0;
-			height: 0;
-			border-left: white solid $size;
-			border-top: transparent solid $size;
-			border-bottom: transparent solid $size;
-		}
-
-		&.active::before {
-			transform: translateY(-50%) rotate(90deg);
-		}
-	}
-
-	.head {
-		font-size: 22px;
-		padding: 0.5em;
+	.column {
+		flex: 1 0 0;
 	}
 }

@@ -1,13 +1,16 @@
 .info-area {
-	flex: 0 1 300px;
-	background-color: #19151A;
+	flex: 0 1 60px;
+	background-color: #da5050;
 
 	display: flex;
 	flex-direction: column;
+
+	a {
+		color: inherit;
+	}
 }
 
 .logo-area {
-	background-color: #A01C1C;
 	flex: 0 0 60px;
 
 	display: flex;
@@ -16,90 +19,20 @@
 	z-index: 0;
 	position: relative;
 
-	&::before {
-		content: '';
-		position: absolute;
-		width: 100%;
-		height: 60%;
-		background: #D21F1F;
-		top: 0;
-		z-index: -1;
-	}
-
 	img {
 		width: 75%;
 	}
 }
 
-.info {
-	flex: 1 0 0;
-	overflow-y: auto;
-}
-
-.head {
-	font-size: 22px;
-	padding: 0.5em;
-}
-
-.togglable-head {
-	font-size: 18px;
-	position: relative;
-	padding-left: 1.5em;
-	margin: 10px 0;
+.button {
+	height: 60px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: calc(60px * 0.6);
 	cursor: pointer;
 
-	&::before {
-		position: absolute;
-		left: 0.5em;
-		top: 50%;
-		transform: translateY(-50%);
-
-		$size: 5px;
-
-		content: '';
-
-		width: 0;
-		height: 0;
-		border-left: white solid $size;
-		border-top: transparent solid $size;
-		border-bottom: transparent solid $size;
+	&:hover {
+		background: #ca2525;
 	}
-
-	&.active::before {
-		transform: translateY(-50%) rotate(90deg);
-	}
-}
-
-.forwarding-config {
-	display: flex;
-	height: 30px;
-	line-height: 30px;
-	padding: 5px 10px;
-
-	label {
-		flex: 0 0 30%;
-	}
-
-	input {
-		flex: 1 0 0;
-		min-width: 0;
-		width: 0;
-		background-color: #3B3B3B;
-		color: white;
-		border: none;
-		border-radius: 3px;
-		padding: 0 0.5em;
-	}
-}
-
-.preview {
-	width: 255px;
-	border-radius: 5px;
-	overflow-wrap: break-word;
-	font-family: monospace;
-	background-color: black;
-	padding: 0.5em;
-	margin: 10px auto;
-	white-space: pre;
-	overflow-y: auto;
 }
