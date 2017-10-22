@@ -1,13 +1,15 @@
 const React = require('react');
 const classNames = require('classnames');
 
+const Gear = require('react-icons/lib/io/gear-b');
+const Forward = require('react-icons/lib/io/forward');
+const GitHub = require('react-icons/lib/io/social-github');
+const PersonStalker = require('react-icons/lib/io/person-stalker');
+const Network = require('react-icons/lib/io/network');
+
 // fmm...
 // https://github.com/gajus/babel-plugin-react-css-modules/issues/38#issuecomment-310890776
 import './InfoArea.pcss';
-
-require('brace/mode/c_cpp');
-require('brace/theme/monokai');
-require('brace/keybinding/vim');
 
 class InfoArea extends React.Component {
 	constructor(props, state) {
@@ -35,50 +37,13 @@ class InfoArea extends React.Component {
 				<div styleName="logo-area">
 					<img src="logo.svg" alt="DragonASIC"/>
 				</div>
-				<div styleName="info">
-					<div styleName="head">Serial Output</div>
-					<div>
-						<div
-							styleName={classNames('togglable-head', {active: this.state.isForwardingVisible})}
-							onClick={this.handleClickTogglable}
-							data-toggle="isForwardingVisible"
-						>
-							Forwarding Config
-						</div>
-						{this.state.isForwardingVisible && (
-							<div>
-								<div styleName="forwarding-config">
-									<label htmlFor="protocol">Protocol</label>
-									<input type="text" name="protocol" value="UDP"/>
-								</div>
-								<div styleName="forwarding-config">
-									<label htmlFor="host">Host</label>
-									<input type="text" name="host" value="172.217.25.206"/>
-								</div>
-								<div styleName="forwarding-config">
-									<label htmlFor="port">Host</label>
-									<input type="text" name="port" value="8080"/>
-								</div>
-							</div>
-						)}
-					</div>
-					<div>
-						<div
-							styleName={classNames('togglable-head', {active: this.state.isPreviewVisible})}
-							onClick={this.handleClickTogglable}
-							data-toggle="isPreviewVisible"
-						>
-							Preview
-						</div>
-						{this.state.isPreviewVisible && (
-							<div>
-								<div styleName="preview">
-									{this.props.preview}
-								</div>
-							</div>
-						)}
-					</div>
-				</div>
+				<div styleName="button"><Gear/></div>
+				<div styleName="button"><Forward/></div>
+				<div styleName="button"><PersonStalker/></div>
+				<div styleName="button"><Network/></div>
+				<a href="https://github.com/DragonASIC/DragonASIC" target="_blank" rel="noopener noreferrer">
+					<div styleName="button"><GitHub/></div>
+				</a>
 			</div>
 		);
 	}
