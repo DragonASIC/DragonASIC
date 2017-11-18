@@ -1,8 +1,25 @@
+/* eslint react/no-multi-comp: "off" */
+
 const React = require('react');
+const Hammer = require('react-hammerjs');
 
 // fmm...
 // https://github.com/gajus/babel-plugin-react-css-modules/issues/38#issuecomment-310890776
 import './Sensor.pcss';
+
+const Point = (props) => {
+	const onPan = (event) => {
+		props.onPan(props.index, event);
+	};
+
+	const pointSize = 4;
+
+	return (
+		<Hammer onPan={onPan}>
+			<rect x={props.x - pointSize} y={props.y / 2 - pointSize} width={pointSize * 2} height={pointSize * 2} fill="white" style={{cursor: 'pointer'}}/>
+		</Hammer>
+	);
+};
 
 class Sensor extends React.Component {
 	constructor(props, state) {
@@ -15,6 +32,8 @@ class Sensor extends React.Component {
 				[128, 128],
 				[192, 128],
 			],
+			tempPointIndex: null,
+			tempPointDelta: null,
 		};
 	}
 
@@ -24,14 +43,36 @@ class Sensor extends React.Component {
 		});
 	}
 
-	render() {
-		const polyline = [
-			[0, this.state.points[0][1]],
-			...this.state.points,
-			[256, this.state.points[this.state.points.length - 1][1]],
-		].map(([x, y]) => `${x},${y / 2}`).join(' ');
+	handlePanPoint = (index, event) => {
+		if (event.eventType === 4 /* INPUT_END */) {
+			this.setState({
+				tempPointIndex: null,
+				tempPointDelta: null,
+			});
+		} else {
+			this.setState({
+				tempPointIndex: index,
+				tempPointDelta: [
+					event.deltaX * 128 / 152,
+					event.deltaY * 128 / 152,
+				],
+			});
+		}
+	}
 
-		const pointSize = 4;
+	render() {
+		const points = this.state.points.slice();
+		if (this.state.tempPointIndex !== null) {
+			points[this.state.tempPointIndex] = points[this.state.tempPointIndex].slice();
+			points[this.state.tempPointIndex][0] += this.state.tempPointDelta[0];
+			points[this.state.tempPointIndex][1] += this.state.tempPointDelta[1];
+		}
+
+		const polyline = [
+			[0, points[0][1]],
+			...points,
+			[256, points[points.length - 1][1]],
+		].map(([x, y]) => `${x},${y / 2}`).join(' ');
 
 		return (
 			<div styleName="sensor">
@@ -41,8 +82,8 @@ class Sensor extends React.Component {
 						<svg viewBox="0 0 256 128">
 							<polygon points={`${polyline} 256,128 0,128`} fill="rgba(255, 0, 0, 0.3)"/>
 							<polyline points={polyline} fill="none" stroke="white" strokeWidth="2"/>
-							{this.state.points.map(([x, y], index) => (
-								<rect key={index} x={x - pointSize} y={y / 2 - pointSize} width={pointSize * 2} height={pointSize * 2} fill="white" style={{cursor: 'pointer'}}/>
+							{points.map(([x, y], index) => (
+								<Point key={index} index={index} x={x} y={y} onPan={this.handlePanPoint}/>
 							))}
 							<line x1={this.props.clock} y1="0" x2={this.props.clock} y2="128" stroke="white" strokeWidth="2"/>
 						</svg>
