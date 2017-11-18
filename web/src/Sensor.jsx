@@ -137,7 +137,7 @@ class Sensor extends React.Component {
 							<div styleName="placeholder">NO DATA</div>
 						) : (
 							<svg viewBox="0 0 256 128">
-								<polygon points={`${polyline} 256,128 0,128`} fill="rgba(255, 0, 0, 0.3)"/>
+								<polygon points={`${polyline} 256,128 0,128`} fill={this.props.direction === 'in' ? 'rgba(255, 0, 0, 0.3)' : 'rgba(0, 0, 255, 0.3)'}/>
 								<polyline points={polyline} fill="none" stroke="white" strokeWidth="2"/>
 								{this.props.direction === 'in' && points.map(([x, y], index) => (
 									<Point key={index} index={index} x={x} y={y} onPan={this.handlePanPoint}/>

@@ -81,7 +81,7 @@ class App extends React.Component {
 		});
 		this.setState({
 			simulationData: data,
-		})
+		});
 	}
 
 	render() {
@@ -128,7 +128,7 @@ class App extends React.Component {
 							name="editor"
 							width="100%"
 							height="100%"
-							value={this.state.code}
+							value={this.code}
 							onChange={this.handleChangeAceEditor}
 						/>
 					)}

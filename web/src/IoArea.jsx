@@ -5,7 +5,6 @@ const Forward = require('react-icons/lib/fa/forward');
 const StepForward = require('react-icons/lib/fa/step-forward');
 const PlusCircle = require('react-icons/lib/fa/plus-circle');
 
-const api = require('./api.js');
 const Sensor = require('./Sensor.jsx');
 
 // fmm...
@@ -84,7 +83,7 @@ class IoArea extends React.Component {
 			<div styleName="io-area">
 				<div styleName="list">
 					<div styleName="head">
-						I/O Terminal
+						Input/Output
 						<div styleName="add-sensor">
 							<div onClick={this.handleClickAddSensor}>
 								<PlusCircle/>
@@ -138,15 +137,15 @@ class IoArea extends React.Component {
 					</div>
 				</div>
 				<div styleName="detail">
-					<div styleName="head">TSL2561</div>
+					<div styleName="head">GPIO0</div>
 					<ul>
 						<li>
 							<div styleName="item">Interface</div>
-							<div styleName="value">I<sup>2</sup>C</div>
+							<div styleName="value">GPIO</div>
 						</li>
 						<li>
 							<div styleName="item">Range</div>
-							<div styleName="value">0.1～40000</div>
+							<div styleName="value">0～255</div>
 						</li>
 						<li>
 							<div styleName="item">Unit</div>
