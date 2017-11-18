@@ -5,6 +5,7 @@ const cors = require('kcors');
 const {blue, green} = require('colors/safe');
 const {stripIndent} = require('common-tags');
 const fs = require('fs-extra');
+const bodyParser = require('koa-bodyparser');
 const {promisify} = require('util');
 const path = require('path');
 
@@ -13,6 +14,7 @@ const runner = require('./runner.js');
 const app = new Koa();
 
 app.use(logger());
+app.use(bodyParser());
 app.use(cors({
 	origin: '*', // FIXME
 	allowMethods: 'GET,POST',
@@ -24,22 +26,11 @@ app.use(get('/', (context) => {
 }));
 
 app.use(post('/generate', async (context) => {
+	const code = context.request.body.code;
+
 	const props = await runner({
 		image: 'frolvlad/alpine-python3',
 		before: async ({tmpPath}) => {
-			const code = stripIndent`
-				LDL 1
-				ST 10
-				LDL 1
-				HOGE 1
-				ADD 10
-				ST 10
-				LD 10
-				ST 11
-				GOTO 2
-				HALT
-			`;
-
 			await fs.writeFile(path.join(tmpPath, 'code.a'), code);
 			await fs.copy(path.resolve(__dirname, '..', 'cpu', 'tools', 'Assembler', 'assembler.py'), path.join(tmpPath, 'assembler.py'));
 		},

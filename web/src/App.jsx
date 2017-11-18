@@ -21,12 +21,16 @@ class App extends React.Component {
 
 		this.state = {
 			code: stripIndent`
-				#include <stdio.h>
-
-				int main(int argc, char *argv[]) {
-					printf("Hello, World!\\n");
-					return 0;
-				}
+				LDL 1
+				ST 10
+				LDL 1
+				HOGE 1
+				ADD 10
+				ST 10
+				LD 10
+				ST 11
+				GOTO 2
+				HALT
 			`,
 			stdout: '',
 			isRunning: false,
@@ -34,7 +38,7 @@ class App extends React.Component {
 			downloadLink: '',
 		};
 
-		this.code = '';
+		this.code = this.state.code;
 	}
 
 	handleClickTab = (event) => {

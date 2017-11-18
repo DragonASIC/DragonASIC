@@ -61,6 +61,7 @@
     "fs-extra": "^4.0.2",
     "kcors": "2",
     "koa": "^2.3.0",
+    "koa-bodyparser": "^4.2.0",
     "koa-logger": "^3.1.0",
     "koa-route": "^3.2.0",
     "tmp": "^0.0.33"
