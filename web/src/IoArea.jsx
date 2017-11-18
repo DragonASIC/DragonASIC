@@ -5,6 +5,7 @@ const Forward = require('react-icons/lib/fa/forward');
 const StepForward = require('react-icons/lib/fa/step-forward');
 const PlusCircle = require('react-icons/lib/fa/plus-circle');
 
+const api = require('./api.js');
 const Sensor = require('./Sensor.jsx');
 
 // fmm...
@@ -24,6 +25,8 @@ class IoArea extends React.Component {
 			isPreviewVisible: true,
 			isSensorModalVisible: false,
 		};
+
+		this.sensorData = [];
 	}
 
 	handleClickTogglable = (event) => {
@@ -62,7 +65,7 @@ class IoArea extends React.Component {
 	}
 
 	handleStartSimulation = () => {
-
+		this.props.onStartSimulation(this.sensorData);
 	}
 
 	handleChangeClock = (delta) => {
@@ -70,6 +73,10 @@ class IoArea extends React.Component {
 		if (this.state.clock !== newClock) {
 			this.setState({clock: newClock});
 		}
+	}
+
+	handleUpdateSensorData = (index, data) => {
+		this.sensorData[index] = data;
 	}
 
 	render() {
@@ -122,9 +129,9 @@ class IoArea extends React.Component {
 						<div styleName="control forward" onClick={this.handleChangeClock.bind(null, 10)}><Forward/></div>
 					</div>
 					<div styleName="sensor-area">
-						<Sensor name="TSL2561" index={0} clock={this.state.clock}/>
-						<Sensor name="DCP0192" index={1} clock={this.state.clock}/>
-						<Sensor name={<span>I<sup>2</sup>C Serial Output</span>} index={2} clock={this.state.clock}/>
+						<Sensor name="GPIO0" index={0} clock={this.state.clock} onUpdateData={this.handleUpdateSensorData} direction="in"/>
+						<Sensor name="GPIO1" index={1} clock={this.state.clock} onUpdateData={this.handleUpdateSensorData} direction="in"/>
+						<Sensor name="GPIO2" index={2} clock={this.state.clock} onUpdateData={this.handleUpdateSensorData} direction="out"/>
 					</div>
 					<div styleName="simulation-button" onClick={this.handleStartSimulation}>
 						Start Simulation

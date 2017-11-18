@@ -35,6 +35,9 @@ class Sensor extends React.Component {
 			tempPointIndex: null,
 			tempPointDelta: null,
 		};
+
+		this.sensorData = [];
+		this.updateSensorData();
 	}
 
 	handleClickHead = () => {
@@ -53,6 +56,8 @@ class Sensor extends React.Component {
 				tempPointDelta: null,
 				points: this.state.points,
 			});
+
+			this.updateSensorData();
 		} else {
 			this.setState({
 				tempPointIndex: index,
@@ -80,6 +85,13 @@ class Sensor extends React.Component {
 		];
 
 		return Math.floor((nearestPoints[1][1] * (clock - nearestPoints[0][0]) + nearestPoints[0][1] * (nearestPoints[1][0] - clock)) / (nearestPoints[1][0] - nearestPoints[0][0]));
+	}
+
+	updateSensorData = () => {
+		this.sensorData = Array(256).fill().map((_, index) => (
+			this.getInterpolatedValue(index)
+		));
+		this.props.onUpdateData(this.props.index, this.sensorData);
 	}
 
 	render() {

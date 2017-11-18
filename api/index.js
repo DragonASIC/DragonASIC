@@ -156,6 +156,73 @@ app.use(post('/generate', async (context) => {
 	};
 }));
 
+app.use(post('/simulate', async (context) => {
+	const {code, sensorData} = context.request.body;
+
+	const assembleResult = await runner({
+		image: 'frolvlad/alpine-python3',
+		before: async ({tmpPath}) => {
+			await fs.writeFile(path.join(tmpPath, 'code.a'), code);
+			await fs.copy(path.resolve(__dirname, '..', 'cpu', 'tools', 'Assembler', 'assembler.py'), path.join(tmpPath, 'assembler.py'));
+		},
+		command: 'cd /volume && python /volume/assembler.py /volume/code.a',
+		after: ({tmpPath}) => fs.readFile(path.join(tmpPath, 'prom.bin')),
+	});
+
+	const simulateResult = await runner({
+		image: 'frolvlad/alpine-python3',
+		before: async ({tmpPath}) => {
+			await fs.writeFile(path.join(tmpPath, 'prom.bin'), assembleResult.data);
+			await fs.writeFile(path.join(tmpPath, 'modules.json'), JSON.stringify({
+				SPI0: {
+					MODULE: 'SPI',
+					BASEADDR: '80',
+				},
+				GPIO0: {
+					MODULE: 'GPIO',
+					BASEADDR: '88',
+				},
+				GPIO1: {
+					MODULE: 'GPIO',
+					BASEADDR: '8C',
+				},
+			}));
+			await fs.writeFile(path.join(tmpPath, 'portinfo.json'), JSON.stringify({
+				GPIO0: {
+					IGPIO: sensorData[0],
+				},
+				GPIO1: {
+					IGPIO: sensorData[1],
+				},
+				GPIO2: {
+					IGPIO: sensorData[1],
+				},
+				SPI0: {
+					SPIRX: [0, 0, 0, 80, 70, 60, 50, 40, 30],
+				},
+				SPI1: {
+					SPIRX: [0, 0, 0, 80, 70, 60, 50, 40, 30],
+				},
+			}));
+			await fs.copy(path.resolve(__dirname, '..', 'cpu', 'tools', 'Emulator', 'TRSQ_emu.py'), path.join(tmpPath, 'TRSQ_emu.py'));
+		},
+		command: 'cd /volume && python TRSQ_emu.py',
+		after: ({tmpPath}) => fs.readFile(path.join(tmpPath, 'port_dump.json')),
+	});
+
+	const data = JSON.parse(simulateResult.data);
+
+	for (const [key, value] of Object.entries(data)) {
+		if (key.startsWith('GPIO')) {
+			data[key] = value.map((pins) => (
+				parseInt(pins.reverse().map((pin) => pin[1]).join(''), 2)
+			));
+		}
+	}
+
+	context.body = data;
+}));
+
 const port = parseInt(process.env.PORT) || 3000;
 app.listen(port);
 

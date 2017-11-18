@@ -73,6 +73,14 @@ class App extends React.Component {
 		this.code = code;
 	}
 
+	handleStartSimulation = async (sensorData) => {
+		const data = await api.post('/simulate', {
+			code: this.code,
+			sensorData,
+		});
+		console.log(data);
+	}
+
 	render() {
 		return (
 			<div styleName="app">
@@ -139,7 +147,7 @@ class App extends React.Component {
 						</div>
 					)}
 				</div>
-				<IoArea/>
+				<IoArea onStartSimulation={this.handleStartSimulation}/>
 			</div>
 		);
 	}
