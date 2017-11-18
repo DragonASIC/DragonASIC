@@ -2,6 +2,7 @@ const Docker = require('dockerode');
 const concatStream = require('concat-stream');
 const path = require('path');
 const tmp = require('tmp');
+const noop = require('lodash/noop');
 const fs = require('fs');
 const {promisify} = require('util');
 
@@ -9,7 +10,7 @@ const docker = new Docker();
 
 class TimeoutError extends Error { }
 
-module.exports = async ({code}) => {
+module.exports = async ({image, command, before = noop, after = noop}) => {
 	const {path: tmpPath, cleanup} = await new Promise((resolve, reject) => {
 		tmp.dir({unsafeCleanup: true}, (error, path, cleanup) => {
 			if (error) {
@@ -21,12 +22,7 @@ module.exports = async ({code}) => {
 	});
 	console.log({tmpPath});
 
-	await promisify(fs.mkdir)(path.join(tmpPath, 'layout'));
-	await promisify(fs.mkdir)(path.join(tmpPath, 'source'));
-	await promisify(fs.mkdir)(path.join(tmpPath, 'synthesis'));
-
-	const codePath = path.join(tmpPath, 'source', 'map9v3.v');
-	await promisify(fs.writeFile)(codePath, code);
+	await before({tmpPath});
 
 	let stdoutWriter = null;
 
@@ -57,8 +53,8 @@ module.exports = async ({code}) => {
 			OpenStdin: false,
 			StdinOnce: false,
 			Env: null,
-			Cmd: ['bash', '-c', 'cd /volume && qflow synthesize place route map9v3'],
-			Image: 'qflow',
+			Cmd: ['bash', '-c', command],
+			Image: image,
 			Volumes: {
 				'/volume': {},
 			},
@@ -106,7 +102,7 @@ module.exports = async ({code}) => {
 		}
 	});
 
-	const data = await promisify(fs.readFile)(path.join(tmpPath, 'layout', 'map9v3.def'));
+	const data = await after({tmpPath});
 
 	cleanup();
 	return {
