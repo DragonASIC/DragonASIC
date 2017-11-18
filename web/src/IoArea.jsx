@@ -65,6 +65,13 @@ class IoArea extends React.Component {
 
 	}
 
+	handleChangeClock = (delta) => {
+		const newClock = Math.max(0, Math.min(this.state.clock + delta, 255));
+		if (this.state.clock !== newClock) {
+			this.setState({clock: newClock});
+		}
+	}
+
 	render() {
 		return (
 			<div styleName="io-area">
@@ -108,16 +115,16 @@ class IoArea extends React.Component {
 						</div>
 					</div>
 					<div styleName="control-area">
-						<div styleName="control backward"><Backward/></div>
-						<div styleName="control step-backward"><StepBackward/></div>
+						<div styleName="control backward" onClick={this.handleChangeClock.bind(null, -10)}><Backward/></div>
+						<div styleName="control step-backward" onClick={this.handleChangeClock.bind(null, -1)}><StepBackward/></div>
 						<input styleName="clock" value={this.state.clock} onChange={this.handleClockChange}/>
-						<div styleName="control step-forward"><StepForward/></div>
-						<div styleName="control forward"><Forward/></div>
+						<div styleName="control step-forward" onClick={this.handleChangeClock.bind(null, 1)}><StepForward/></div>
+						<div styleName="control forward" onClick={this.handleChangeClock.bind(null, 10)}><Forward/></div>
 					</div>
 					<div styleName="sensor-area">
-						<Sensor name="TSL2561" index={0}/>
-						<Sensor name="DCP0192" index={1}/>
-						<Sensor name={<span>I<sup>2</sup>C Serial Output</span>} index={2}/>
+						<Sensor name="TSL2561" index={0} clock={this.state.clock}/>
+						<Sensor name="DCP0192" index={1} clock={this.state.clock}/>
+						<Sensor name={<span>I<sup>2</sup>C Serial Output</span>} index={2} clock={this.state.clock}/>
 					</div>
 					<div styleName="simulation-button" onClick={this.handleStartSimulation}>
 						Start Simulation
