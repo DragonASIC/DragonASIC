@@ -1,0 +1,3 @@
+[submodule "cpu"]
+	path = cpu
+	url = https://github.com/taltalp/TRSQ8.git

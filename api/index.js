@@ -3,7 +3,8 @@ const {get, post} = require('koa-route');
 const logger = require('koa-logger');
 const cors = require('kcors');
 const {blue, green} = require('colors/safe');
-const fs = require('fs');
+const {stripIndent} = require('common-tags');
+const fs = require('fs-extra');
 const {promisify} = require('util');
 const path = require('path');
 
@@ -23,6 +24,31 @@ app.use(get('/', (context) => {
 }));
 
 app.use(post('/generate', async (context) => {
+	const props = await runner({
+		image: 'frolvlad/alpine-python3',
+		before: async ({tmpPath}) => {
+			const code = stripIndent`
+				LDL 1
+				ST 10
+				LDL 1
+				HOGE 1
+				ADD 10
+				ST 10
+				LD 10
+				ST 11
+				GOTO 2
+				HALT
+			`;
+
+			await fs.writeFile(path.join(tmpPath, 'code.a'), code);
+			await fs.copy(path.resolve(__dirname, '..', 'cpu', 'tools', 'Assembler', 'assembler.py'), path.join(tmpPath, 'assembler.py'));
+		},
+		command: 'cd /volume && python /volume/assembler.py /volume/code.a',
+		after: ({tmpPath}) => fs.readFile(path.join(tmpPath, 'prom.bin')),
+	});
+
+	console.log(props.data.toString());
+
 	const {data, stdout, stderr} = await runner({
 		image: 'qflow',
 		before: async ({tmpPath}) => {

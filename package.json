@@ -58,6 +58,7 @@
     "colors": "^1.1.2",
     "concat-stream": "^1.6.0",
     "dockerode": "^2.5.1",
+    "fs-extra": "^4.0.2",
     "kcors": "2",
     "koa": "^2.3.0",
     "koa-logger": "^3.1.0",

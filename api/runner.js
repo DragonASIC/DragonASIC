@@ -54,7 +54,7 @@ module.exports = async ({image, command, before = noop, after = noop, onStdout =
 			OpenStdin: false,
 			StdinOnce: false,
 			Env: null,
-			Cmd: ['bash', '-c', command],
+			Cmd: ['sh', '-c', command],
 			Image: image,
 			Volumes: {
 				'/volume': {},
