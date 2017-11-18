@@ -45,9 +45,13 @@ class Sensor extends React.Component {
 
 	handlePanPoint = (index, event) => {
 		if (event.eventType === 4 /* INPUT_END */) {
+			this.state.points[index][0] += (event.deltaX * 128 / 152);
+			this.state.points[index][1] += (event.deltaY * 128 / 152);
+
 			this.setState({
 				tempPointIndex: null,
 				tempPointDelta: null,
+				points: this.state.points,
 			});
 		} else {
 			this.setState({
