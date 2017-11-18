@@ -5,6 +5,8 @@ const Forward = require('react-icons/lib/fa/forward');
 const StepForward = require('react-icons/lib/fa/step-forward');
 const PlusCircle = require('react-icons/lib/fa/plus-circle');
 
+const Sensor = require('./Sensor.jsx');
+
 // fmm...
 // https://github.com/gajus/babel-plugin-react-css-modules/issues/38#issuecomment-310890776
 import './IoArea.pcss';
@@ -59,6 +61,10 @@ class IoArea extends React.Component {
 		}
 	}
 
+	handleStartSimulation = () => {
+
+	}
+
 	render() {
 		return (
 			<div styleName="io-area">
@@ -108,14 +114,13 @@ class IoArea extends React.Component {
 						<div styleName="control step-forward"><StepForward/></div>
 						<div styleName="control forward"><Forward/></div>
 					</div>
-					<div styleName="sensor">
-						<div styleName="sensor-head">TSL2561 [0]</div>
+					<div styleName="sensor-area">
+						<Sensor name="TSL2561" index={0}/>
+						<Sensor name="DCP0192" index={1}/>
+						<Sensor name={<span>I<sup>2</sup>C Serial Output</span>} index={2}/>
 					</div>
-					<div styleName="sensor">
-						<div styleName="sensor-head">DCP0192 [1]</div>
-					</div>
-					<div styleName="sensor">
-						<div styleName="sensor-head">I<sup>2</sup>C Serial Output [2]</div>
+					<div styleName="simulation-button" onClick={this.handleStartSimulation}>
+						Start Simulation
 					</div>
 				</div>
 				<div styleName="detail">

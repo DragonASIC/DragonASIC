@@ -1,0 +1,40 @@
+.sensor {
+	margin: 6px;
+	border-radius: 3px;
+	background: #494756;
+	padding: 0.1em;
+
+
+	&:last-child {
+		border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+	}
+}
+
+.sensor-head {
+	font-size: 15px;
+	position: relative;
+	padding-left: 1.2em;
+	margin: 5px 0;
+	cursor: pointer;
+
+	&::before {
+		position: absolute;
+		left: 0.5em;
+		top: 50%;
+		transform: translateY(-50%);
+
+		$size: 5px;
+
+		content: '';
+
+		width: 0;
+		height: 0;
+		border-left: white solid $size;
+		border-top: transparent solid $size;
+		border-bottom: transparent solid $size;
+	}
+
+	&.active::before {
+		transform: translateY(-50%) rotate(90deg);
+	}
+}
