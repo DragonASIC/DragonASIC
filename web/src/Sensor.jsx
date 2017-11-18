@@ -16,7 +16,7 @@ const Point = (props) => {
 
 	return (
 		<Hammer onPan={onPan}>
-			<rect x={props.x - pointSize} y={props.y / 2 - pointSize} width={pointSize * 2} height={pointSize * 2} fill="white" style={{cursor: 'pointer'}}/>
+			<rect x={props.x - pointSize} y={(256 - props.y) / 2 - pointSize} width={pointSize * 2} height={pointSize * 2} fill="white" style={{cursor: 'pointer'}}/>
 		</Hammer>
 	);
 };
@@ -46,7 +46,7 @@ class Sensor extends React.Component {
 	handlePanPoint = (index, event) => {
 		if (event.eventType === 4 /* INPUT_END */) {
 			this.state.points[index][0] += (event.deltaX * 128 / 152);
-			this.state.points[index][1] += (event.deltaY * 128 / 152);
+			this.state.points[index][1] -= (event.deltaY * 128 / 152);
 
 			this.setState({
 				tempPointIndex: null,
@@ -64,23 +64,41 @@ class Sensor extends React.Component {
 		}
 	}
 
+	getInterpolatedValue = (clock) => {
+		if (clock <= this.state.points[0][0]) {
+			return Math.floor(this.state.points[0][1]);
+		}
+
+		if (this.state.points[this.state.points.length - 1][0] <= clock) {
+			return Math.floor(this.state.points[this.state.points.length - 1][1]);
+		}
+
+		const nearestIndex = this.state.points.findIndex(([x]) => clock <= x);
+		const nearestPoints = [
+			this.state.points[nearestIndex - 1],
+			this.state.points[nearestIndex],
+		];
+
+		return Math.floor((nearestPoints[1][1] * (clock - nearestPoints[0][0]) + nearestPoints[0][1] * (nearestPoints[1][0] - clock)) / (nearestPoints[1][0] - nearestPoints[0][0]));
+	}
+
 	render() {
 		const points = this.state.points.slice();
 		if (this.state.tempPointIndex !== null) {
 			points[this.state.tempPointIndex] = points[this.state.tempPointIndex].slice();
 			points[this.state.tempPointIndex][0] += this.state.tempPointDelta[0];
-			points[this.state.tempPointIndex][1] += this.state.tempPointDelta[1];
+			points[this.state.tempPointIndex][1] -= this.state.tempPointDelta[1];
 		}
 
 		const polyline = [
 			[0, points[0][1]],
 			...points,
 			[256, points[points.length - 1][1]],
-		].map(([x, y]) => `${x},${y / 2}`).join(' ');
+		].map(([x, y]) => `${x},${(256 - y) / 2}`).join(' ');
 
 		return (
 			<div styleName="sensor">
-				<div styleName="head" onClick={this.handleClickHead}>{this.props.name} [{this.props.index}]</div>
+				<div styleName="head" onClick={this.handleClickHead}>{this.props.name} [{this.props.index}] ({this.getInterpolatedValue(this.props.clock)})</div>
 				{this.state.isOpen && (
 					<div styleName="content">
 						<svg viewBox="0 0 256 128">
