@@ -11,6 +11,74 @@
 
 	.head {
 		color: #494756;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		.add-sensor {
+			font-size: 1.4em;
+			line-height: 1;
+			cursor: pointer;
+			color: #da5050;
+			position: relative;
+
+			.sensor-modal {
+				position: absolute;
+				top: calc(100% + 10px);
+				right: 0;
+				width: 280px;
+				height: 400px;
+				background: white;
+				border-radius: 5px;
+
+				overflow-y: scroll;
+				color: #494756;
+				z-index: 1;
+
+				padding: 8px;
+				cursor: auto;
+
+				&::before {
+					$size: 8px;
+
+					content: '';
+					position: absolute;
+					bottom: 100%;
+					right: calc(0.5em - $size);
+					border-right: $size solid transparent;
+					border-left: $size solid transparent;
+					border-bottom: $size solid white;
+				}
+
+				.modal-head {
+					padding-left: 0.5em;
+					position: relative;
+					font-size: 18px;
+					line-height: 1.5em;
+					cursor: pointer;
+
+					&::before {
+						content: '';
+						position: absolute;
+
+						$size: 0.3em;
+						border-top: $size solid transparent;
+						border-bottom: $size solid transparent;
+						border-left: $size solid #494756;
+
+						top: 50%;
+						left: 0;
+						transform: translateY(-50%);
+					}
+				}
+
+				.modal-list {
+					font-size: 16px;
+					padding: 0 1em 0.5em;
+					line-height: 1.5em;
+				}
+			}
+		}
 	}
 
 	.control-area {
@@ -63,7 +131,7 @@
 .head {
 	font-size: 30px;
 	font-weight: bold;
-	padding-left: 0.5em;
+	padding: 0 0.5em;
 	margin: 0.3em 0;
 }
 

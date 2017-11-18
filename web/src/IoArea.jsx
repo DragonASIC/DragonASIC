@@ -3,6 +3,7 @@ const Backward = require('react-icons/lib/fa/backward');
 const StepBackward = require('react-icons/lib/fa/step-backward');
 const Forward = require('react-icons/lib/fa/forward');
 const StepForward = require('react-icons/lib/fa/step-forward');
+const PlusCircle = require('react-icons/lib/fa/plus-circle');
 
 // fmm...
 // https://github.com/gajus/babel-plugin-react-css-modules/issues/38#issuecomment-310890776
@@ -16,8 +17,10 @@ class IoArea extends React.Component {
 			modules: [],
 			wires: [],
 			clock: 0,
+			shownModalHead: null,
 			isForwardingVisible: true,
 			isPreviewVisible: true,
+			isSensorModalVisible: false,
 		};
 	}
 
@@ -38,12 +41,65 @@ class IoArea extends React.Component {
 		}
 	}
 
+	handleClickAddSensor = () => {
+		this.setState({
+			isSensorModalVisible: !this.state.isSensorModalVisible,
+		});
+	}
+
+	handleClickModalHead = (event) => {
+		if (event.target.textContent === this.state.shownModalHead) {
+			this.setState({
+				shownModalHead: null,
+			});
+		} else {
+			this.setState({
+				shownModalHead: event.target.textContent,
+			});
+		}
+	}
+
 	render() {
 		return (
 			<div styleName="io-area">
 				<div styleName="list">
 					<div styleName="head">
-						I/O List
+						I/O Terminal
+						<div styleName="add-sensor">
+							<div onClick={this.handleClickAddSensor}>
+								<PlusCircle/>
+							</div>
+							{this.state.isSensorModalVisible && (
+								<div styleName="sensor-modal">
+									<div styleName="modal-item">
+										<div styleName="modal-head" onClick={this.handleClickModalHead}>
+											Examples
+										</div>
+										{this.state.shownModalHead === 'Examples' && (
+											<div styleName="modal-list">
+												<div styleName="modal-list-item">TSL2561</div>
+												<div styleName="modal-list-item">DCP0192</div>
+												<div styleName="modal-list-item">I<sup>2</sup>C Serial Output</div>
+											</div>
+										)}
+									</div>
+									{['Automotive', 'Electric', 'Optical', 'Pressure', 'Serial'].map((item) => (
+										<div key={item} styleName="modal-item">
+											<div styleName="modal-head" onClick={this.handleClickModalHead}>
+												{item}
+											</div>
+											{this.state.shownModalHead === item && (
+												<div styleName="modal-list">
+													{Array(5).fill().map((_, index) => (
+														<div key={index} styleName="modal-list-item">xxxxx</div>
+													))}
+												</div>
+											)}
+										</div>
+									))}
+								</div>
+							)}
+						</div>
 					</div>
 					<div styleName="control-area">
 						<div styleName="control backward"><Backward/></div>

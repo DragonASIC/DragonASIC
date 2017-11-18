@@ -14,6 +14,7 @@ import './App.pcss';
 
 require('brace/mode/c_cpp');
 require('brace/theme/eclipse');
+require('brace/keybinding/vim');
 
 class App extends React.Component {
 	constructor() {
