@@ -3,7 +3,7 @@
 	border-radius: 3px;
 	background: #494756;
 	padding: 0.1em;
-
+	user-select: none;
 
 	&:last-child {
 		border-bottom: 1px solid rgba(255, 255, 255, 0.5);
@@ -37,4 +37,11 @@
 	&.active::before {
 		transform: translateY(-50%) rotate(90deg);
 	}
+}
+
+.placeholder {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 5em;
 }

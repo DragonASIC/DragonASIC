@@ -70,6 +70,14 @@ class Sensor extends React.Component {
 	}
 
 	getInterpolatedValue = (clock) => {
+		if (this.props.direction === 'out') {
+			if (this.props.data === null) {
+				return null;
+			}
+
+			return this.props.data[clock];
+		}
+
 		if (clock <= this.state.points[0][0]) {
 			return Math.floor(this.state.points[0][1]);
 		}
@@ -95,14 +103,26 @@ class Sensor extends React.Component {
 	}
 
 	render() {
-		const points = this.state.points.slice();
-		if (this.state.tempPointIndex !== null) {
-			points[this.state.tempPointIndex] = points[this.state.tempPointIndex].slice();
-			points[this.state.tempPointIndex][0] += this.state.tempPointDelta[0];
-			points[this.state.tempPointIndex][1] -= this.state.tempPointDelta[1];
-		}
+		const points = (() => {
+			if (this.props.direction === 'in') {
+				const points = this.state.points.slice();
+				if (this.state.tempPointIndex !== null) {
+					points[this.state.tempPointIndex] = points[this.state.tempPointIndex].slice();
+					points[this.state.tempPointIndex][0] += this.state.tempPointDelta[0];
+					points[this.state.tempPointIndex][1] -= this.state.tempPointDelta[1];
+				}
+				return points;
+			}
 
-		const polyline = [
+			// assert(this.props.direction ---)
+			if (this.props.data === null) {
+				return null;
+			}
+
+			return this.props.data.map((value, index) => [index, value]);
+		})();
+
+		const polyline = points && [
 			[0, points[0][1]],
 			...points,
 			[256, points[points.length - 1][1]],
@@ -113,14 +133,18 @@ class Sensor extends React.Component {
 				<div styleName="head" onClick={this.handleClickHead}>{this.props.name} [{this.props.index}] ({this.getInterpolatedValue(this.props.clock)})</div>
 				{this.state.isOpen && (
 					<div styleName="content">
-						<svg viewBox="0 0 256 128">
-							<polygon points={`${polyline} 256,128 0,128`} fill="rgba(255, 0, 0, 0.3)"/>
-							<polyline points={polyline} fill="none" stroke="white" strokeWidth="2"/>
-							{points.map(([x, y], index) => (
-								<Point key={index} index={index} x={x} y={y} onPan={this.handlePanPoint}/>
-							))}
-							<line x1={this.props.clock} y1="0" x2={this.props.clock} y2="128" stroke="white" strokeWidth="2"/>
-						</svg>
+						{points === null ? (
+							<div styleName="placeholder">NO DATA</div>
+						) : (
+							<svg viewBox="0 0 256 128">
+								<polygon points={`${polyline} 256,128 0,128`} fill="rgba(255, 0, 0, 0.3)"/>
+								<polyline points={polyline} fill="none" stroke="white" strokeWidth="2"/>
+								{this.props.direction === 'in' && points.map(([x, y], index) => (
+									<Point key={index} index={index} x={x} y={y} onPan={this.handlePanPoint}/>
+								))}
+								<line x1={this.props.clock} y1="0" x2={this.props.clock} y2="128" stroke="white" strokeWidth="2"/>
+							</svg>
+						)}
 					</div>
 				)}
 			</div>

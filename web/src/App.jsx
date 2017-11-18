@@ -37,6 +37,7 @@ class App extends React.Component {
 			isRunning: false,
 			activeTab: 'editor',
 			downloadLink: '',
+			simulationData: null,
 		};
 
 		this.code = this.state.code;
@@ -78,7 +79,9 @@ class App extends React.Component {
 			code: this.code,
 			sensorData,
 		});
-		console.log(data);
+		this.setState({
+			simulationData: data,
+		})
 	}
 
 	render() {
@@ -147,7 +150,7 @@ class App extends React.Component {
 						</div>
 					)}
 				</div>
-				<IoArea onStartSimulation={this.handleStartSimulation}/>
+				<IoArea onStartSimulation={this.handleStartSimulation} simulationData={this.state.simulationData}/>
 			</div>
 		);
 	}
