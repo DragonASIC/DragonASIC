@@ -186,6 +186,10 @@ app.use(post('/simulate', async (context) => {
 					MODULE: 'GPIO',
 					BASEADDR: '8C',
 				},
+				GPIO2: {
+					MODULE: 'GPIO',
+					BASEADDR: '90',
+				},
 			}));
 			await fs.writeFile(path.join(tmpPath, 'portinfo.json'), JSON.stringify({
 				GPIO0: {
@@ -195,7 +199,7 @@ app.use(post('/simulate', async (context) => {
 					IGPIO: sensorData[1],
 				},
 				GPIO2: {
-					IGPIO: sensorData[1],
+					IGPIO: sensorData[2],
 				},
 				SPI0: {
 					SPIRX: [0, 0, 0, 80, 70, 60, 50, 40, 30],

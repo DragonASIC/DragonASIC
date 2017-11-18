@@ -128,9 +128,9 @@ class IoArea extends React.Component {
 						<div styleName="control forward" onClick={this.handleChangeClock.bind(null, 10)}><Forward/></div>
 					</div>
 					<div styleName="sensor-area">
-						<Sensor name="GPIO0" index={0} clock={this.state.clock} onUpdateData={this.handleUpdateSensorData} direction="in"/>
 						<Sensor name="GPIO1" index={1} clock={this.state.clock} onUpdateData={this.handleUpdateSensorData} direction="in"/>
-						<Sensor name="GPIO2" index={2} clock={this.state.clock} onUpdateData={this.handleUpdateSensorData} direction="out" data={this.props.simulationData && this.props.simulationData.GPIO0}/>
+						<Sensor name="GPIO2" index={2} clock={this.state.clock} onUpdateData={this.handleUpdateSensorData} direction="in"/>
+						<Sensor name="GPIO0" index={0} clock={this.state.clock} onUpdateData={this.handleUpdateSensorData} direction="out" data={this.props.simulationData && this.props.simulationData.GPIO0}/>
 					</div>
 					<div styleName="simulation-button" onClick={this.handleStartSimulation}>
 						Start Simulation

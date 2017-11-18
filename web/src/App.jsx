@@ -77,7 +77,7 @@ class App extends React.Component {
 	handleStartSimulation = async (sensorData) => {
 		const data = await api.post('/simulate', {
 			code: this.code,
-			sensorData,
+			sensorData: sensorData.map((datum) => datum.map((value) => value || 0)),
 		});
 		this.setState({
 			simulationData: data,
