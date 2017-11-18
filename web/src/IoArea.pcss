@@ -8,6 +8,29 @@
 
 .list {
 	flex: 1 0 0;
+
+	.head {
+		color: #494756;
+	}
+
+	.control-area {
+		display: flex;
+		font-size: 25px;
+		padding: 0 0.3em;
+		color: #494756;
+
+		.control {
+			width: 1.3em;
+			text-align: center;
+			cursor: pointer;
+		}
+
+		input {
+			flex: 1 0 0;
+			width: 0;
+			text-align: center;
+		}
+	}
 }
 
 .detail {
@@ -91,5 +114,5 @@
 	margin: 20px;
 	padding: 0.5em;
 	color: rgba(255, 255, 255, 0.66);
-	cursor: pointer;
+	cursor: not-allowed;
 }

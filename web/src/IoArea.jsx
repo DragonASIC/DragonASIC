@@ -1,4 +1,8 @@
 const React = require('react');
+const Backward = require('react-icons/lib/fa/backward');
+const StepBackward = require('react-icons/lib/fa/step-backward');
+const Forward = require('react-icons/lib/fa/forward');
+const StepForward = require('react-icons/lib/fa/step-forward');
 
 // fmm...
 // https://github.com/gajus/babel-plugin-react-css-modules/issues/38#issuecomment-310890776
@@ -11,6 +15,7 @@ class IoArea extends React.Component {
 		this.state = {
 			modules: [],
 			wires: [],
+			clock: 0,
 			isForwardingVisible: true,
 			isPreviewVisible: true,
 		};
@@ -24,10 +29,29 @@ class IoArea extends React.Component {
 		}
 	}
 
+	handleClockChange = (event) => {
+		const newClock = parseInt(event.target.value);
+		if (!Number.isNaN(newClock)) {
+			this.setState({
+				clock: newClock,
+			});
+		}
+	}
+
 	render() {
 		return (
 			<div styleName="io-area">
 				<div styleName="list">
+					<div styleName="head">
+						I/O List
+					</div>
+					<div styleName="control-area">
+						<div styleName="control backward"><Backward/></div>
+						<div styleName="control step-backward"><StepBackward/></div>
+						<input styleName="clock" value={this.state.clock} onChange={this.handleClockChange}/>
+						<div styleName="control step-forward"><StepForward/></div>
+						<div styleName="control forward"><Forward/></div>
+					</div>
 					<div styleName="sensor">
 						<div styleName="sensor-head">TSL2561 [0]</div>
 					</div>
