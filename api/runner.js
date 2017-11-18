@@ -5,12 +5,13 @@ const tmp = require('tmp');
 const noop = require('lodash/noop');
 const fs = require('fs');
 const {promisify} = require('util');
+const {PassThrough} = require('stream');
 
 const docker = new Docker();
 
 class TimeoutError extends Error { }
 
-module.exports = async ({image, command, before = noop, after = noop}) => {
+module.exports = async ({image, command, before = noop, after = noop, onStdout = noop, onStderr = noop}) => {
 	const {path: tmpPath, cleanup} = await new Promise((resolve, reject) => {
 		tmp.dir({unsafeCleanup: true}, (error, path, cleanup) => {
 			if (error) {
@@ -70,11 +71,21 @@ module.exports = async ({image, command, before = noop, after = noop}) => {
 			stderr: true,
 		});
 
-		container.modem.demuxStream(stream, stdoutWriter, stderrWriter);
+		const stdoutPass = new PassThrough();
+		const stderrPass = new PassThrough();
+
+		stdoutPass.pipe(stdoutWriter);
+		stderrPass.pipe(stderrWriter);
+
+		stdoutPass.on('data', onStdout);
+		stderrPass.on('data', onStderr);
+
 		stream.on('end', () => {
-			stdoutWriter.end();
-			stderrWriter.end();
+			stdoutPass.end();
+			stderrPass.end();
 		});
+
+		container.modem.demuxStream(stream, stdoutPass, stderrPass);
 
 		await container.start();
 		await container.wait();

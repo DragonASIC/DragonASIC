@@ -127,6 +127,9 @@ app.use(post('/generate', async (context) => {
 		},
 		command: 'cd /volume && qflow synthesize place route map9v3',
 		after: ({tmpPath}) => promisify(fs.readFile)(path.join(tmpPath, 'layout', 'map9v3.def')),
+		onStdout: (data) => {
+			// process.stdout.write(data);
+		},
 	});
 
 	context.body = {
