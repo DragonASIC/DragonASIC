@@ -4,7 +4,7 @@ MAINTAINER Koki Takahashi <hakatasiloving@gmail.com>
 RUN sed -i.bak -e "s%http://archive.ubuntu.com/ubuntu/%http://ftp.jaist.ac.jp/pub/Linux/ubuntu/%g" /etc/apt/sources.list
 
 RUN apt update -y && \
-    apt upgrade && \
+    apt upgrade -y && \
     apt install -y software-properties-common
 
 RUN add-apt-repository ppa:saltmakrell/ppa
