@@ -32,6 +32,10 @@
 		border-left: white solid $size;
 		border-top: transparent solid $size;
 		border-bottom: transparent solid $size;
+
+		.sensor.open & {
+			transform: translateY(-50%) rotate(90deg);
+		}
 	}
 
 	&.active::before {

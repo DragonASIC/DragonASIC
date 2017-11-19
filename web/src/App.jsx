@@ -21,18 +21,7 @@ class App extends React.Component {
 		super();
 
 		this.state = {
-			code: stripIndent`
-				LDL 1
-				ST 10
-				LDL 1
-				HOGE 1
-				ADD 10
-				ST 10
-				LD 10
-				ST 11
-				GOTO 2
-				HALT
-			`,
+			code: '',
 			stdout: '',
 			isRunning: false,
 			activeTab: 'editor',

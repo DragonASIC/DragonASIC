@@ -2,6 +2,7 @@
 
 const React = require('react');
 const Hammer = require('react-hammerjs');
+const classNames = require('classnames');
 
 // fmm...
 // https://github.com/gajus/babel-plugin-react-css-modules/issues/38#issuecomment-310890776
@@ -28,9 +29,9 @@ class Sensor extends React.Component {
 		this.state = {
 			isOpen: false,
 			points: [
-				[64, 128],
-				[128, 128],
-				[192, 128],
+				[64, 20],
+				[128, 20],
+				[192, 20],
 			],
 			tempPointIndex: null,
 			tempPointDelta: null,
@@ -129,7 +130,7 @@ class Sensor extends React.Component {
 		].map(([x, y]) => `${x},${(256 - y) / 2}`).join(' ');
 
 		return (
-			<div styleName="sensor">
+			<div styleName={classNames('sensor', {open: this.state.isOpen})}>
 				<div styleName="head" onClick={this.handleClickHead}>{this.props.name} [{this.props.index}] ({this.getInterpolatedValue(this.props.clock)})</div>
 				{this.state.isOpen && (
 					<div styleName="content">
