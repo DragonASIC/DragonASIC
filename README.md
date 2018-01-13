@@ -10,3 +10,24 @@
 
 [mitou]: https://www.ipa.go.jp/jinzai/mitou/2017/
 [project]: https://www.ipa.go.jp/jinzai/mitou/2017/gaiyou_f-1.html
+
+## Prerequisites
+
+* [Node.js](https://nodejs.org/en/) v9
+* Docker
+
+## Install
+
+```sh
+cd /path/to/DragonASIC
+npm install
+docker build qflow -t qflow
+```
+
+## Start Server
+
+```sh
+npm run dev
+```
+
+The site will be up on http://localhost:8080/
