@@ -1,0 +1,15 @@
+version: '2'
+services:
+  assembler:
+    image: python:3.6.4-alpine3.7
+    working_dir: /cpu
+    volumes:
+      - ./cpu:/cpu
+  compiler:
+    build: ./compiler
+    image: compiler
+    volumes:
+      - ./compiler/elvm:/elvm
+  qflow:
+    build: ./qflow
+    image: qflow

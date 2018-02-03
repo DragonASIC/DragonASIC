@@ -20,8 +20,11 @@
 
 ```sh
 cd /path/to/DragonASIC
+git submodule update --init --recursive
 npm install
-docker build qflow -t qflow
+docker-compose build
+docker-compose run compiler make COMMONFLAGS=-Wall CC=clang out/8cc out/elc
+npm run build:web
 ```
 
 ## Start Server
@@ -31,3 +34,17 @@ npm run dev
 ```
 
 The site will be up on http://localhost:8080/
+
+## Build flow
+
+```sh
+# compile
+docker-compose run compiler ./out/8cc -S -o out/gpio.c.eir test/gpio.c
+docker-compose run compiler ./out/elc -trsq out/gpio.c.eir > cpu/gpio.asm
+
+# assemble
+docker-compose run assembler python tools/Assembler/assembler.py gpio.asm
+
+# layout
+docker-compose run qflow ???
+```
