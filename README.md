@@ -46,5 +46,5 @@ docker-compose run compiler ./out/elc -trsq out/gpio.c.eir > cpu/gpio.asm
 docker-compose run assembler python tools/Assembler/assembler.py gpio.asm
 
 # layout
-docker-compose run qflow ???
+docker-compose run qflow
 ```
