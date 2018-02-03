@@ -1,3 +1,6 @@
 [submodule "cpu"]
 	path = cpu
 	url = https://github.com/taltalp/TRSQ8.git
+[submodule "compiler/elvm"]
+	path = compiler/elvm
+	url = https://github.com/hakatashi/elvm.git
