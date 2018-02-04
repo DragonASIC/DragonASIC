@@ -2,6 +2,7 @@
     "parser": "babel-eslint",
     "extends": "@hakatashi",
     "rules": {
-        "no-console": "off"
+        "no-console": "off",
+        "max-len": "off"
     }
 }
