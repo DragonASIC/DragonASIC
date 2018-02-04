@@ -21,7 +21,6 @@ module.exports = async ({image, command, before = noop, after = noop, onStdout =
 			}
 		});
 	});
-	console.log({tmpPath});
 
 	await before({tmpPath});
 
@@ -42,6 +41,7 @@ module.exports = async ({image, command, before = noop, after = noop, onStdout =
 	});
 
 	const dockerVolumePath = path.sep === '\\' ? tmpPath.replace('C:\\', '/c/').replace(/\\/g, '/') : tmpPath;
+	const elvmPath = path.sep === '\\' ? path.resolve('compiler/elvm').replace('C:\\', '/c/').replace(/\\/g, '/') : path.resolve('compiler/elvm');
 
 	const executeContainer = async () => {
 		const container = await docker.createContainer({
@@ -58,10 +58,14 @@ module.exports = async ({image, command, before = noop, after = noop, onStdout =
 			Image: image,
 			Volumes: {
 				'/volume': {},
+				'/elvm': {},
 			},
 			VolumesFrom: [],
 			HostConfig: {
-				Binds: [`${dockerVolumePath}:/volume`],
+				Binds: [
+					`${dockerVolumePath}:/volume`,
+					`${elvmPath}:/elvm`,
+				],
 			},
 		});
 

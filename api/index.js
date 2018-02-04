@@ -159,21 +159,52 @@ app.use(post('/generate', async (context) => {
 app.use(post('/simulate', async (context) => {
 	const {code, sensorData} = context.request.body;
 
-	const assembleResult = await runner({
-		image: 'frolvlad/alpine-python3',
+	console.log(`${blue('LOG')} Compiling frontend...`);
+
+	const frontendResult = await runner({
+		image: 'compiler',
 		before: async ({tmpPath}) => {
-			await fs.writeFile(path.join(tmpPath, 'code.a'), code);
+			await fs.writeFile(path.join(tmpPath, 'code.c'), code);
+		},
+		command: './out/8cc -S -o /volume/code.c.eir /volume/code.c',
+		after: ({tmpPath}) => fs.readFile(path.join(tmpPath, 'code.c.eir')),
+	});
+
+	console.log(`${blue('LOG')} Compiling backend...`);
+
+	const backendResult = await runner({
+		image: 'compiler',
+		before: async ({tmpPath}) => {
+			await fs.writeFile(path.join(tmpPath, 'code.c.eir'), frontendResult.data);
+		},
+		command: './out/elc -trsq /volume/code.c.eir',
+	});
+
+	console.log('=== Compile Result ===');
+	console.log(backendResult.stdout.toString());
+
+	console.log(`${blue('LOG')} Assembling...`);
+
+	const assembleResult = await runner({
+		image: 'python:3.6.4-alpine3.7',
+		before: async ({tmpPath}) => {
+			await fs.writeFile(path.join(tmpPath, 'code.a'), backendResult.stdout);
 			await fs.copy(path.resolve(__dirname, '..', 'cpu', 'tools', 'Assembler', 'assembler.py'), path.join(tmpPath, 'assembler.py'));
 		},
 		command: 'cd /volume && python /volume/assembler.py /volume/code.a',
 		after: ({tmpPath}) => fs.readFile(path.join(tmpPath, 'prom.bin')),
 	});
 
+	console.log(`${blue('LOG')} Simulating...`);
+
 	const simulateResult = await runner({
-		image: 'frolvlad/alpine-python3',
+		image: 'python:3.6.4-alpine3.7',
 		before: async ({tmpPath}) => {
-			await fs.writeFile(path.join(tmpPath, 'prom.bin'), assembleResult.data);
-			await fs.writeFile(path.join(tmpPath, 'modules.json'), JSON.stringify({
+			await fs.ensureDir(path.join(tmpPath, 'settings'));
+			await fs.ensureDir(path.join(tmpPath, 'Emulator'));
+
+			await fs.writeFile(path.join(tmpPath, 'settings', 'prom.bin'), assembleResult.data);
+			await fs.writeFile(path.join(tmpPath, 'settings', 'modules.json'), JSON.stringify({
 				SPI0: {
 					MODULE: 'SPI',
 					BASEADDR: '80',
@@ -191,7 +222,7 @@ app.use(post('/simulate', async (context) => {
 					BASEADDR: '90',
 				},
 			}));
-			await fs.writeFile(path.join(tmpPath, 'portinfo.json'), JSON.stringify({
+			await fs.writeFile(path.join(tmpPath, 'settings', 'portinfo.json'), JSON.stringify({
 				GPIO0: {
 					IGPIO: sensorData[0],
 				},
@@ -208,10 +239,10 @@ app.use(post('/simulate', async (context) => {
 					SPIRX: [0, 0, 0, 80, 70, 60, 50, 40, 30],
 				},
 			}));
-			await fs.copy(path.resolve(__dirname, '..', 'cpu', 'tools', 'Emulator', 'TRSQ_emu.py'), path.join(tmpPath, 'TRSQ_emu.py'));
+			await fs.copy(path.resolve(__dirname, '..', 'cpu', 'tools', 'Emulator', 'TRSQ_emu.py'), path.join(tmpPath, 'Emulator', 'TRSQ_emu.py'));
 		},
-		command: 'cd /volume && python TRSQ_emu.py',
-		after: ({tmpPath}) => fs.readFile(path.join(tmpPath, 'port_dump.json')),
+		command: 'cd /volume/Emulator && python TRSQ_emu.py',
+		after: ({tmpPath}) => fs.readFile(path.join(tmpPath, 'Emulator', 'port_dump.json')),
 	});
 
 	const data = JSON.parse(simulateResult.data);

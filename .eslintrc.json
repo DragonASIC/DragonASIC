@@ -1,4 +1,7 @@
 {
     "parser": "babel-eslint",
-    "extends": "@hakatashi"
+    "extends": "@hakatashi",
+    "rules": {
+        "no-console": "off"
+    }
 }
