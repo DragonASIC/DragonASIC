@@ -1,6 +1,7 @@
 /* eslint react/no-multi-comp: "off" */
 
 const React = require('react');
+const PropTypes = require('prop-types');
 const {default: Hammer} = require('react-hammerjs');
 const classNames = require('classnames');
 
@@ -23,11 +24,24 @@ const Point = (props) => {
 };
 
 class Sensor extends React.Component {
+	static propTypes = {
+		name: PropTypes.oneOfType([
+			PropTypes.arrayOf(PropTypes.node),
+			PropTypes.node,
+		]).isRequired,
+		direction: PropTypes.oneOf(['in', 'out']).isRequired,
+		data: PropTypes.arrayOf(PropTypes.number),
+	}
+
+	static defaultProps = {
+		data: null,
+	}
+
 	constructor(props, state) {
 		super(props, state);
 
 		this.state = {
-			isOpen: false,
+			isOpen: true,
 			points: [
 				[64, 20],
 				[128, 20],
@@ -42,9 +56,9 @@ class Sensor extends React.Component {
 	}
 
 	handleClickHead = () => {
-		this.setState({
-			isOpen: !this.state.isOpen,
-		});
+		this.setState(({isOpen}) => ({
+			isOpen: !isOpen,
+		}));
 	}
 
 	handlePanPoint = (index, event) => {

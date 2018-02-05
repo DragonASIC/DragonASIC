@@ -2,6 +2,7 @@ const React = require('react');
 const {default: AceEditor} = require('react-ace');
 const classNames = require('classnames');
 const ArrowDown = require('react-icons/lib/io/arrow-down-c');
+const {stripIndent} = require('common-tags');
 const InfoArea = require('./InfoArea.jsx');
 const IoArea = require('./IoArea.jsx');
 const api = require('./api.js');
@@ -21,7 +22,12 @@ class App extends React.Component {
 		super();
 
 		this.state = {
-			code: '',
+			code: stripIndent`
+				int main() {
+				  *((unsigned char *)0x88) = 0x80;
+				  return 0;
+				}
+			`,
 			stdout: '',
 			isRunning: false,
 			isSimulating: false,

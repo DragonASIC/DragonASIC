@@ -7,16 +7,47 @@ const StepBackward = require('react-icons/lib/fa/step-backward');
 const Forward = require('react-icons/lib/fa/forward');
 const StepForward = require('react-icons/lib/fa/step-forward');
 const PlusCircle = require('react-icons/lib/fa/plus-circle');
+const {Tooltip} = require('react-tippy');
 
 const Sensor = require('./Sensor.jsx');
 
 import './IoArea.pcss';
+
+class ModalListItem extends React.Component {
+	static propTypes = {
+		children: PropTypes.oneOfType([
+			PropTypes.arrayOf(PropTypes.node),
+			PropTypes.node,
+		]).isRequired,
+		onClick: PropTypes.func.isRequired,
+		direction: PropTypes.oneOf(['in', 'out']).isRequired,
+	}
+
+	handleClick = (event) => {
+		this.props.onClick(this.props.children, this.props.direction, event);
+	}
+
+	render() {
+		return (
+			<div styleName="modal-list-item" onClick={this.handleClick}>
+				{this.props.children}
+			</div>
+		);
+	}
+}
 
 class IoArea extends React.Component {
 	static propTypes = {
 		isSimulating: PropTypes.bool.isRequired,
 		onStartSimulation: PropTypes.func.isRequired,
 		simulationStatus: PropTypes.string.isRequired,
+		simulationData: PropTypes.shape({
+			GPIO0: PropTypes.arrayOf(PropTypes.number).isRequired,
+		}),
+	}
+
+	static defaultProps = {
+		simulationData: null,
 	}
 
 	constructor(props, state) {
@@ -24,11 +55,15 @@ class IoArea extends React.Component {
 
 		this.state = {
 			clock: 0,
-			shownModalHead: null,
+			sensors: [],
 			isSensorModalVisible: false,
 		};
 
-		this.sensorData = [];
+		this.sensorData = [
+			Array(256).fill(0),
+			Array(256).fill(0),
+			Array(256).fill(0),
+		];
 	}
 
 	handleClockChange = (event) => {
@@ -46,18 +81,6 @@ class IoArea extends React.Component {
 		}));
 	}
 
-	handleClickModalHead = (event) => {
-		if (event.target.textContent === this.state.shownModalHead) {
-			this.setState({
-				shownModalHead: null,
-			});
-		} else {
-			this.setState({
-				shownModalHead: event.target.textContent,
-			});
-		}
-	}
-
 	handleStartSimulation = () => {
 		this.props.onStartSimulation(this.sensorData);
 	}
@@ -73,6 +96,21 @@ class IoArea extends React.Component {
 		this.sensorData[index] = data;
 	}
 
+	handleRequestCloseTooltip = () => {
+		this.setState({isSensorModalVisible: false});
+	}
+
+	handleClickModalListItem = (node, direction) => {
+		this.setState(({sensors}) => ({
+			isSensorModalVisible: false,
+			sensors: sensors.concat([{
+				node,
+				index: sensors.length,
+				direction,
+			}]),
+		}));
+	}
+
 	render() {
 		return (
 			<div styleName="io-area">
@@ -80,39 +118,65 @@ class IoArea extends React.Component {
 					<div styleName="head">
 						Input/Output
 						<div styleName="add-sensor">
-							<div onClick={this.handleClickAddSensor}>
-								<PlusCircle/>
-							</div>
-							{this.state.isSensorModalVisible && (
-								<div styleName="sensor-modal">
-									<div styleName="modal-item">
-										<div styleName="modal-head" onClick={this.handleClickModalHead}>
-											Examples
-										</div>
-										{this.state.shownModalHead === 'Examples' && (
+							<Tooltip
+								duration={100}
+								position="bottom-end"
+								open={this.state.isSensorModalVisible}
+								interactive
+								arrow
+								animateFill={false}
+								onRequestClose={this.handleRequestCloseTooltip}
+								html={
+									<div styleName="sensor-modal">
+										<div styleName="modal-item">
+											<div styleName="modal-head-area">
+												<div styleName="modal-head">Examples</div>
+											</div>
 											<div styleName="modal-list">
-												<div styleName="modal-list-item">TSL2561</div>
-												<div styleName="modal-list-item">DCP0192</div>
-												<div styleName="modal-list-item">I<sup>2</sup>C Serial Output</div>
+												<ModalListItem
+													onClick={this.handleClickModalListItem}
+													direction="in"
+												>
+													GPIO in
+												</ModalListItem>
+												<ModalListItem
+													onClick={this.handleClickModalListItem}
+													direction="out"
+												>
+													GPIO out
+												</ModalListItem>
+												<ModalListItem
+													onClick={this.handleClickModalListItem}
+													directian="out"
+												>
+													I<sup>2</sup>C Serial Output
+												</ModalListItem>
 											</div>
-										)}
-									</div>
-									{['Automotive', 'Electric', 'Optical', 'Pressure', 'Serial'].map((item) => (
-										<div key={item} styleName="modal-item">
-											<div styleName="modal-head" onClick={this.handleClickModalHead}>
-												{item}
-											</div>
-											{this.state.shownModalHead === item && (
+										</div>
+										{['Automotive', 'Electric', 'Optical', 'Pressure', 'Serial'].map((item) => (
+											<div key={item} styleName="modal-item">
+												<div styleName="modal-head-area">
+													<div styleName="modal-head">{item}</div>
+												</div>
 												<div styleName="modal-list">
 													{Array(5).fill().map((_, index) => (
-														<div key={index} styleName="modal-list-item">xxxxx</div>
+														<ModalListItem
+															key={index}
+															onClick={this.handleClickModalListItem}
+														>
+															xxxxx
+														</ModalListItem>
 													))}
 												</div>
-											)}
-										</div>
-									))}
+											</div>
+										))}
+									</div>
+								}
+							>
+								<div onClick={this.handleClickAddSensor}>
+									<PlusCircle/>
 								</div>
-							)}
+							</Tooltip>
 						</div>
 					</div>
 					<div styleName="control-area">
@@ -123,9 +187,17 @@ class IoArea extends React.Component {
 						<div styleName="control forward" onClick={this.handleChangeClock.bind(null, 10)}><Forward/></div>
 					</div>
 					<div styleName="sensor-area">
-						<Sensor name="GPIO1" index={1} clock={this.state.clock} onUpdateData={this.handleUpdateSensorData} direction="in"/>
-						<Sensor name="GPIO2" index={2} clock={this.state.clock} onUpdateData={this.handleUpdateSensorData} direction="in"/>
-						<Sensor name="GPIO0" index={0} clock={this.state.clock} onUpdateData={this.handleUpdateSensorData} direction="out" data={this.props.simulationData && this.props.simulationData.GPIO0}/>
+						{this.state.sensors.map(({index, node, direction}) => (
+							<Sensor
+								key={index}
+								name={node}
+								index={index}
+								clock={this.state.clock}
+								onUpdateData={this.handleUpdateSensorData}
+								direction={direction}
+								data={this.props.simulationData && this.props.simulationData.GPIO0}
+							/>
+						))}
 					</div>
 					<div styleName="simulation-button-area">
 						{this.props.isSimulating && this.props.simulationStatus && (
