@@ -3,8 +3,6 @@ const concatStream = require('concat-stream');
 const path = require('path');
 const tmp = require('tmp');
 const noop = require('lodash/noop');
-const fs = require('fs');
-const {promisify} = require('util');
 const {PassThrough} = require('stream');
 
 const docker = new Docker();
@@ -13,11 +11,11 @@ class TimeoutError extends Error { }
 
 module.exports = async ({image, command, before = noop, after = noop, onStdout = noop, onStderr = noop}) => {
 	const {path: tmpPath, cleanup} = await new Promise((resolve, reject) => {
-		tmp.dir({unsafeCleanup: true}, (error, path, cleanup) => {
+		tmp.dir({unsafeCleanup: true}, (error, dirPath, dirCleanup) => {
 			if (error) {
 				reject(error);
 			} else {
-				resolve({path, cleanup});
+				resolve({path: dirPath, cleanup: dirCleanup});
 			}
 		});
 	});

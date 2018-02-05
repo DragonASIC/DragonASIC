@@ -3,7 +3,6 @@ const {get, post} = require('koa-route');
 const logger = require('koa-logger');
 const cors = require('kcors');
 const {blue, green} = require('colors/safe');
-const {stripIndent} = require('common-tags');
 const fs = require('fs-extra');
 const bodyParser = require('koa-bodyparser');
 const {promisify} = require('util');
@@ -26,7 +25,7 @@ app.use(get('/', (context) => {
 }));
 
 app.use(post('/generate', async (context) => {
-	const code = context.request.body.code;
+	const {code} = context.request.body;
 
 	const props = await runner({
 		image: 'frolvlad/alpine-python3',
@@ -43,7 +42,7 @@ app.use(post('/generate', async (context) => {
 	const {data, stdout, stderr} = await runner({
 		image: 'qflow',
 		before: async ({tmpPath}) => {
-			const code = `
+			const verilog = `
 				/*
 				 *--------------------------------------------------------------
 				 * This module converts a counter value N into a reset value
@@ -140,13 +139,10 @@ app.use(post('/generate', async (context) => {
 			await promisify(fs.mkdir)(path.join(tmpPath, 'synthesis'));
 
 			const codePath = path.join(tmpPath, 'source', 'map9v3.v');
-			await promisify(fs.writeFile)(codePath, code);
+			await promisify(fs.writeFile)(codePath, verilog);
 		},
 		command: 'cd /volume && qflow synthesize place route map9v3',
 		after: ({tmpPath}) => promisify(fs.readFile)(path.join(tmpPath, 'layout', 'map9v3.def')),
-		onStdout: (data) => {
-			// process.stdout.write(data);
-		},
 	});
 
 	context.body = {
@@ -250,7 +246,7 @@ app.use(post('/simulate', async (context) => {
 	for (const [key, value] of Object.entries(data)) {
 		if (key.startsWith('GPIO')) {
 			data[key] = value.map((pins) => (
-				parseInt(pins.reverse().map((pin) => pin[1]).join(''), 2)
+				parseInt(pins.reverse().map(([, pin]) => pin).join(''), 2)
 			));
 		}
 	}
