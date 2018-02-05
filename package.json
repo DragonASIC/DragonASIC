@@ -1,6 +1,9 @@
 {
   "name": "DragonASIC",
   "version": "1.0.0",
+  "engines": {
+    "node": ">=9"
+  },
   "scripts": {
     "build:web": "concurrently \"npm run build:web:html\" \"npm run build:web:js\"",
     "build:web:html": "pug web/index.pug",
@@ -39,6 +42,7 @@
     "postcss-flexbugs-fixes": "^3.0.0",
     "postcss-loader": "^2.0.6",
     "precss": "^2.0.0",
+    "prop-types": "^15.6.0",
     "pug-cli": "^1.0.0-alpha6",
     "react": "^16.2.0",
     "react-ace": "^5.2.0",
@@ -46,6 +50,7 @@
     "react-hammerjs": "^1.0.1",
     "react-icons": "^2.2.7",
     "react-measure": "^2.0.2",
+    "react-spinner": "^0.2.7",
     "react-tippy": "^1.2.2",
     "spinkit": "^1.2.5",
     "style-loader": "^0.20.1",

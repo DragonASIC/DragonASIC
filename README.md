@@ -15,6 +15,7 @@
 
 * [Node.js](https://nodejs.org/en/) v9
 * Docker
+* [Docker Compose](https://docs.docker.com/compose/)
 
 ## Install
 

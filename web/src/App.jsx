@@ -1,12 +1,12 @@
 const React = require('react');
 const {default: AceEditor} = require('react-ace');
-const {stripIndent} = require('common-tags');
 const classNames = require('classnames');
 const ArrowDown = require('react-icons/lib/io/arrow-down-c');
 const InfoArea = require('./InfoArea.jsx');
 const IoArea = require('./IoArea.jsx');
 const api = require('./api.js');
 const simulator = require('../lib/simulator.ts');
+const {wait} = require('./util.js');
 
 // fmm...
 // https://github.com/gajus/babel-plugin-react-css-modules/issues/38#issuecomment-310890776
@@ -24,6 +24,8 @@ class App extends React.Component {
 			code: '',
 			stdout: '',
 			isRunning: false,
+			isSimulating: false,
+			simulationStatus: '',
 			activeTab: 'editor',
 			downloadLink: '',
 			simulationData: null,
@@ -64,12 +66,34 @@ class App extends React.Component {
 	}
 
 	handleStartSimulation = async (sensorData) => {
+		if (this.state.isSimulating) {
+			return;
+		}
+
+		this.setState({
+			isSimulating: true,
+			simulationStatus: 'Communicating...',
+		});
+
+		(async () => {
+			await wait(300);
+			this.setState({simulationStatus: 'Compiling Backend...'});
+			await wait(3000);
+			this.setState({simulationStatus: 'Compiling Frontend...'});
+			await wait(4000);
+			this.setState({simulationStatus: 'Assembling...'});
+			await wait(2300);
+			this.setState({simulationStatus: 'Simulating...'});
+		})();
+
 		const data = await api.post('/simulate', {
 			code: this.code,
 			sensorData: sensorData.map((datum) => datum.map((value) => value || 0)),
 		});
+
 		this.setState({
 			simulationData: data,
+			isSimulating: false,
 		});
 	}
 
@@ -139,7 +163,12 @@ class App extends React.Component {
 						</div>
 					)}
 				</div>
-				<IoArea onStartSimulation={this.handleStartSimulation} simulationData={this.state.simulationData}/>
+				<IoArea
+					isSimulating={this.state.isSimulating}
+					onStartSimulation={this.handleStartSimulation}
+					simulationData={this.state.simulationData}
+					simulationStatus={this.state.simulationStatus}
+				/>
 			</div>
 		);
 	}

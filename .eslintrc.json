@@ -3,6 +3,7 @@
     "extends": "@hakatashi",
     "rules": {
         "no-console": "off",
-        "max-len": "off"
+        "max-len": "off",
+        "node/no-unsupported-features": "off"
     }
 }

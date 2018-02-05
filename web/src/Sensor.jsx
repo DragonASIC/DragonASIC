@@ -1,7 +1,7 @@
 /* eslint react/no-multi-comp: "off" */
 
 const React = require('react');
-const Hammer = require('react-hammerjs');
+const {default: Hammer} = require('react-hammerjs');
 const classNames = require('classnames');
 
 // fmm...

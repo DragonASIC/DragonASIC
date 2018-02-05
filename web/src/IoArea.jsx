@@ -1,4 +1,7 @@
 const React = require('react');
+const PropTypes = require('prop-types');
+const classNames = require('classnames');
+const Spinner = require('react-spinner');
 const Backward = require('react-icons/lib/fa/backward');
 const StepBackward = require('react-icons/lib/fa/step-backward');
 const Forward = require('react-icons/lib/fa/forward');
@@ -7,33 +10,25 @@ const PlusCircle = require('react-icons/lib/fa/plus-circle');
 
 const Sensor = require('./Sensor.jsx');
 
-// fmm...
-// https://github.com/gajus/babel-plugin-react-css-modules/issues/38#issuecomment-310890776
 import './IoArea.pcss';
 
 class IoArea extends React.Component {
+	static propTypes = {
+		isSimulating: PropTypes.bool.isRequired,
+		onStartSimulation: PropTypes.func.isRequired,
+		simulationStatus: PropTypes.string.isRequired,
+	}
+
 	constructor(props, state) {
 		super(props, state);
 
 		this.state = {
-			modules: [],
-			wires: [],
 			clock: 0,
 			shownModalHead: null,
-			isForwardingVisible: true,
-			isPreviewVisible: true,
 			isSensorModalVisible: false,
 		};
 
 		this.sensorData = [];
-	}
-
-	handleClickTogglable = (event) => {
-		if (event.target.dataset.toggle) {
-			this.setState({
-				[event.target.dataset.toggle]: !this.state[event.target.dataset.toggle],
-			});
-		}
 	}
 
 	handleClockChange = (event) => {
@@ -46,9 +41,9 @@ class IoArea extends React.Component {
 	}
 
 	handleClickAddSensor = () => {
-		this.setState({
-			isSensorModalVisible: !this.state.isSensorModalVisible,
-		});
+		this.setState((prevState) => ({
+			isSensorModalVisible: !prevState.isSensorModalVisible,
+		}));
 	}
 
 	handleClickModalHead = (event) => {
@@ -132,8 +127,22 @@ class IoArea extends React.Component {
 						<Sensor name="GPIO2" index={2} clock={this.state.clock} onUpdateData={this.handleUpdateSensorData} direction="in"/>
 						<Sensor name="GPIO0" index={0} clock={this.state.clock} onUpdateData={this.handleUpdateSensorData} direction="out" data={this.props.simulationData && this.props.simulationData.GPIO0}/>
 					</div>
-					<div styleName="simulation-button" onClick={this.handleStartSimulation}>
-						Start Simulation
+					<div styleName="simulation-button-area">
+						{this.props.isSimulating && this.props.simulationStatus && (
+							<div styleName="simulation-status">
+								{this.props.simulationStatus}
+							</div>
+						)}
+						<div
+							styleName={classNames('simulation-button', {simulating: this.props.isSimulating})}
+							onClick={this.handleStartSimulation}
+						>
+							{this.props.isSimulating ? (
+								<Spinner/>
+							) : (
+								'Start Simulation'
+							)}
+						</div>
 					</div>
 				</div>
 				<div styleName="detail">

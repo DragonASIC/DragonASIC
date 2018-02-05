@@ -139,17 +139,40 @@
 
 .sensor-area {
 	flex: 1 0 0;
+	overflow-y: auto;
+}
+
+.simulation-button-area {
+	margin: 0.5em auto;
+	width: 80%;
+}
+
+.simulation-status {
+	font-weight: bold;
+	font-size: 13px;
+	text-align: center;
+	line-height: 1.5em;
+	color: cadetblue;
 }
 
 .simulation-button {
-	width: 80%;
-	text-align: center;
-	margin: 0.5em auto;
-	font-size: 24px;
-	background: cadetblue;
-	line-height: 2em;
+	position: relative;
+
+	width: 100%;
+	min-height: 2em;
 	border-radius: 6px;
+
+	text-align: center;
+	font-size: 24px;
+	line-height: 2em;
+
+	background: cadetblue;
+
 	cursor: pointer;
+	
+	&.simulating {
+		cursor: not-allowed;
+	}
 }
 
 .button {
