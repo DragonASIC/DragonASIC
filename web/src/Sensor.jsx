@@ -4,6 +4,7 @@ const React = require('react');
 const PropTypes = require('prop-types');
 const {default: Hammer} = require('react-hammerjs');
 const classNames = require('classnames');
+const Trash = require('react-icons/lib/fa/trash');
 
 // fmm...
 // https://github.com/gajus/babel-plugin-react-css-modules/issues/38#issuecomment-310890776
@@ -31,6 +32,8 @@ class Sensor extends React.Component {
 		]).isRequired,
 		direction: PropTypes.oneOf(['in', 'out']).isRequired,
 		data: PropTypes.arrayOf(PropTypes.number),
+		index: PropTypes.number.isRequired,
+		onRequestClose: PropTypes.func.isRequired,
 	}
 
 	static defaultProps = {
@@ -82,6 +85,10 @@ class Sensor extends React.Component {
 				],
 			});
 		}
+	}
+	
+	handleClickTrash = (event) => {
+		this.props.onRequestClose(this.props.index, event);
 	}
 
 	getInterpolatedValue = (clock) => {
@@ -145,7 +152,10 @@ class Sensor extends React.Component {
 
 		return (
 			<div styleName={classNames('sensor', {open: this.state.isOpen})}>
-				<div styleName="head" onClick={this.handleClickHead}>{this.props.name} [{this.props.index}] ({this.getInterpolatedValue(this.props.clock)})</div>
+				<div styleName="head" onClick={this.handleClickHead}>
+					{this.props.name} [{this.props.index}] ({this.getInterpolatedValue(this.props.clock)})
+					<Trash styleName="trash" onClick={this.handleClickTrash}/>
+				</div>
 				{this.state.isOpen && (
 					<div styleName="content">
 						{points === null ? (

@@ -105,9 +105,15 @@ class IoArea extends React.Component {
 			isSensorModalVisible: false,
 			sensors: sensors.concat([{
 				node,
-				index: sensors.length,
+				index: Math.max(-1, ...sensors.map(({index}) => index)) + 1,
 				direction,
 			}]),
+		}));
+	}
+
+	handleRequestCloseSensor = (index) => {
+		this.setState(({sensors}) => ({
+			sensors: sensors.filter((sensor) => sensor.index !== index),
 		}));
 	}
 
@@ -194,6 +200,7 @@ class IoArea extends React.Component {
 								index={index}
 								clock={this.state.clock}
 								onUpdateData={this.handleUpdateSensorData}
+								onRequestClose={this.handleRequestCloseSensor}
 								direction={direction}
 								data={this.props.simulationData && this.props.simulationData.GPIO0}
 							/>

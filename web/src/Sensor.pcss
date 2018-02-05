@@ -11,11 +11,17 @@
 }
 
 .head {
-	font-size: 15px;
 	position: relative;
 	padding-left: 1.2em;
-	margin: 5px 0;
+	
+	font-size: 15px;
+	line-height: 2em;
+	
 	cursor: pointer;
+	
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 
 	&::before {
 		position: absolute;
@@ -40,6 +46,13 @@
 
 	&.active::before {
 		transform: translateY(-50%) rotate(90deg);
+	}
+	
+	.trash {
+		color: red;
+		color: #ff766c;
+		font-size: 1.5em;
+		margin-right: 0.1em;
 	}
 }
 
