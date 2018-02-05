@@ -3,7 +3,10 @@ node_js:
   - node
 
 dist: trusty
-sudo: false
+sudo: required # for running docker
+
+services:
+  - docker
 
 # Setup xvfb
 # https://github.com/electron/electron/blob/master/docs/tutorial/testing-on-headless-ci.md
@@ -16,6 +19,15 @@ addons:
         key_url: 'https://dl.yarnpkg.com/debian/pubkey.gpg'
     packages:
       - yarn
+  
+env:
+  - DOCKER_COMPOSE_VERSION=1.18.0
+
+before_install:
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
 
 install:
   - yarn install
@@ -23,7 +35,8 @@ install:
 
 script:
   - yarn lint
-  - yarn build:web
+  - yarn build
+  - docker-compose build && docker-compose run compiler make COMMONFLAGS=-Wall out/8cc out/elc
 
 # after_success:
 #   - bash web/bin/deploy.sh

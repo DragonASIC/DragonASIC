@@ -5,6 +5,7 @@
     "node": ">=9"
   },
   "scripts": {
+    "build": "npm run build",
     "build:web": "concurrently \"npm run build:web:html\" \"npm run build:web:js\"",
     "build:web:html": "pug web/index.pug",
     "build:web:js": "cd web && webpack",

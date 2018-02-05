@@ -7,6 +7,7 @@ const StepBackward = require('react-icons/lib/fa/step-backward');
 const Forward = require('react-icons/lib/fa/forward');
 const StepForward = require('react-icons/lib/fa/step-forward');
 const PlusCircle = require('react-icons/lib/fa/plus-circle');
+const Gear = require('react-icons/lib/go/gear');
 const {Tooltip} = require('react-tippy');
 
 const Sensor = require('./Sensor.jsx');
@@ -186,11 +187,11 @@ class IoArea extends React.Component {
 						</div>
 					</div>
 					<div styleName="control-area">
-						<div styleName="control backward" onClick={this.handleChangeClock.bind(null, -10)}><Backward/></div>
-						<div styleName="control step-backward" onClick={this.handleChangeClock.bind(null, -1)}><StepBackward/></div>
-						<input styleName="clock" value={this.state.clock} onChange={this.handleClockChange}/>
-						<div styleName="control step-forward" onClick={this.handleChangeClock.bind(null, 1)}><StepForward/></div>
-						<div styleName="control forward" onClick={this.handleChangeClock.bind(null, 10)}><Forward/></div>
+						<div styleName="control" onClick={this.handleChangeClock.bind(null, -10)}><Backward/></div>
+						<div styleName="control" onClick={this.handleChangeClock.bind(null, -1)}><StepBackward/></div>
+						<input value={this.state.clock} onChange={this.handleClockChange}/>
+						<div styleName="control" onClick={this.handleChangeClock.bind(null, 1)}><StepForward/></div>
+						<div styleName="control" onClick={this.handleChangeClock.bind(null, 10)}><Forward/></div>
 					</div>
 					<div styleName="sensor-area">
 						{this.state.sensors.map(({index, node, direction}) => (
@@ -219,7 +220,9 @@ class IoArea extends React.Component {
 							{this.props.isSimulating ? (
 								<Spinner/>
 							) : (
-								'Start Simulation'
+								<React.Fragment>
+									<Gear/> Start Simulation
+								</React.Fragment>
 							)}
 						</div>
 					</div>
@@ -240,9 +243,14 @@ class IoArea extends React.Component {
 							<div styleName="value">Lux</div>
 						</li>
 					</ul>
-					<div styleName="button">
+					<Tooltip
+						styleName="button"
+						style={{display: 'block'}}
+						duration={100}
+						title="Unimplemented"
+					>
 						Connect via WebUSB
-					</div>
+					</Tooltip>
 				</div>
 			</div>
 		);

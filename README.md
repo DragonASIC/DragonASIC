@@ -14,7 +14,7 @@
 ## Prerequisites
 
 * [Node.js](https://nodejs.org/en/) v9
-* Docker
+* [Docker](https://www.docker.com/)
 * [Docker Compose](https://docs.docker.com/compose/)
 
 ## Install
@@ -22,10 +22,10 @@
 ```sh
 cd /path/to/DragonASIC
 git submodule update --init --recursive
-npm install
 docker-compose build
 docker-compose run compiler make COMMONFLAGS=-Wall out/8cc out/elc
-npm run build:web
+npm install
+npm run build
 ```
 
 ## Start Server
