@@ -6,6 +6,7 @@ const {stripIndent} = require('common-tags');
 const InfoArea = require('./InfoArea.jsx');
 const IoArea = require('./IoArea.jsx');
 const api = require('./api.js');
+// eslint-disable-next-line no-unused-vars
 const simulator = require('../lib/simulator.ts');
 const {wait} = require('./util.js');
 
@@ -136,7 +137,7 @@ class App extends React.Component {
 								</div>
 							</div>
 						) : (
-							<button styleName="run" onClick={this.handleClickRun}/>
+							<button type="button" styleName="run" onClick={this.handleClickRun}/>
 						)}
 					</div>
 					{this.state.activeTab === 'editor' && (
