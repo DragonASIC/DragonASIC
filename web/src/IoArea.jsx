@@ -156,7 +156,7 @@ class IoArea extends React.Component {
 													onClick={this.handleClickModalListItem}
 													directian="out"
 												>
-													I<sup>2</sup>C Serial Output
+													SPI Serial Output
 												</ModalListItem>
 											</div>
 										</div>
