@@ -12,6 +12,8 @@ const {Tooltip} = require('react-tippy');
 
 const Sensor = require('./Sensor.jsx');
 
+const CLOCKS = 1024;
+
 import './IoArea.pcss';
 
 class ModalListItem extends React.Component {
@@ -61,9 +63,9 @@ class IoArea extends React.Component {
 		};
 
 		this.sensorData = [
-			Array(256).fill(0),
-			Array(256).fill(0),
-			Array(256).fill(0),
+			Array(CLOCKS).fill(0),
+			Array(CLOCKS).fill(0),
+			Array(CLOCKS).fill(0),
 		];
 	}
 
@@ -134,7 +136,7 @@ class IoArea extends React.Component {
 								animateFill={false}
 								onRequestClose={this.handleRequestCloseTooltip}
 								html={
-									<div styleName="sensor-modal" style={{ width: 400 }}>									
+									<div styleName="sensor-modal" style={{width: 400}}>
 										<div styleName="modal-item">
 											<div styleName="modal-head-area">
 												<div styleName="modal-head">On-chip Sensors</div>
@@ -153,9 +155,9 @@ class IoArea extends React.Component {
 													Illuminance (Input)
 												</ModalListItem>
 											</div>
-										</div>	
+										</div>
 										<div styleName="modal-item">
-										
+
 											<div styleName="modal-head-area">
 												<div styleName="modal-head">General I/O for External Sensor</div>
 											</div>

@@ -6,6 +6,8 @@ const {default: Hammer} = require('react-hammerjs');
 const classNames = require('classnames');
 const Trash = require('react-icons/lib/fa/trash');
 
+const CLOCKS = 1024;
+
 // fmm...
 // https://github.com/gajus/babel-plugin-react-css-modules/issues/38#issuecomment-310890776
 import './Sensor.pcss';
@@ -47,7 +49,7 @@ class Sensor extends React.Component {
 			isOpen: true,
 			points: (
 				Array(10).fill().map((_, i) => (
-					[Math.floor(256 / 11 * (i + 1)), 20]
+					[Math.floor(CLOCKS / 11 * (i + 1)), 20]
 				))
 			),
 			tempPointIndex: null,
@@ -118,7 +120,7 @@ class Sensor extends React.Component {
 	}
 
 	updateSensorData = () => {
-		this.sensorData = Array(256).fill().map((_, index) => (
+		this.sensorData = Array(CLOCKS).fill().map((_, index) => (
 			this.getInterpolatedValue(index)
 		));
 		this.props.onUpdateData(this.props.index, this.sensorData);
@@ -147,8 +149,8 @@ class Sensor extends React.Component {
 		const polyline = points && [
 			[0, points[0][1]],
 			...points,
-			[256, points[points.length - 1][1]],
-		].map(([x, y]) => `${x},${(256 - y) / 2}`).join(' ');
+			[CLOCKS, points[points.length - 1][1]],
+		].map(([x, y]) => `${x / CLOCKS * 256},${(256 - y) / 2}`).join(' ');
 
 		return (
 			<div styleName={classNames('sensor', {open: this.state.isOpen})}>
@@ -165,9 +167,9 @@ class Sensor extends React.Component {
 								<polygon points={`${polyline} 256,128 0,128`} fill={this.props.direction === 'in' ? 'rgba(255, 0, 0, 0.3)' : 'rgba(0, 0, 255, 0.3)'}/>
 								<polyline points={polyline} fill="none" stroke="white" strokeWidth="2"/>
 								{this.props.direction === 'in' && points.map(([x, y], index) => (
-									<Point key={index} index={index} x={x} y={y} onPan={this.handlePanPoint}/>
+									<Point key={index} index={index} x={x / CLOCKS * 256} y={y} onPan={this.handlePanPoint}/>
 								))}
-								<line x1={this.props.clock} y1="0" x2={this.props.clock} y2="128" stroke="white" strokeWidth="2"/>
+								<line x1={this.props.clock / CLOCKS * 256} y1="0" x2={this.props.clock / CLOCKS * 256} y2="128" stroke="white" strokeWidth="2"/>
 							</svg>
 						)}
 					</div>

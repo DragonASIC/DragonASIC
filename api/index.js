@@ -250,7 +250,7 @@ app.use(post('/simulate', async (context) => {
 			}));
 			await fs.copy(path.resolve(__dirname, '..', 'cpu', 'tools', 'Emulator', 'TRSQ_emu.py'), path.join(tmpPath, 'Emulator', 'TRSQ_emu.py'));
 		},
-		command: 'cd /volume/Emulator && python TRSQ_emu.py',
+		command: 'cd /volume/Emulator && python TRSQ_emu.py -c 1024',
 		after: ({tmpPath}) => fs.readFile(path.join(tmpPath, 'Emulator', 'port_dump.json')),
 	});
 
