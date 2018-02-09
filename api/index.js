@@ -5,6 +5,7 @@ const cors = require('kcors');
 const {blue, green} = require('colors/safe');
 const fs = require('fs-extra');
 const bodyParser = require('koa-bodyparser');
+const {stripIndent} = require('common-tags');
 const {promisify} = require('util');
 const path = require('path');
 
@@ -160,7 +161,19 @@ app.use(post('/simulate', async (context) => {
 	const frontendResult = await runner({
 		image: 'compiler',
 		before: async ({tmpPath}) => {
-			await fs.writeFile(path.join(tmpPath, 'code.c'), code);
+			await fs.writeFile(path.join(tmpPath, 'code.c'), stripIndent`
+				#define OGPIO0 *((unsigned char *)0x88)
+				#define TRIS0 *((unsigned char *)0x89)
+				#define IGPIO0 *((unsigned char *)0x8A)
+				#define OGPIO1 *((unsigned char *)0x8C)
+				#define TRIS1 *((unsigned char *)0x8D)
+				#define OGPIO2 *((unsigned char *)0x90)
+				#define TRIS2 *((unsigned char *)0x91)
+				#define INPUT 0xFF
+				#define OUTPUT 0x00
+				
+				${code}
+			`);
 		},
 		command: './out/8cc -S -o /volume/code.c.eir /volume/code.c',
 		after: ({tmpPath}) => fs.readFile(path.join(tmpPath, 'code.c.eir')),
@@ -242,6 +255,7 @@ app.use(post('/simulate', async (context) => {
 	});
 
 	const data = JSON.parse(simulateResult.data);
+	console.log(data);
 
 	for (const [key, value] of Object.entries(data)) {
 		if (key.startsWith('GPIO')) {
