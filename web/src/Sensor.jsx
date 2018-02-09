@@ -45,11 +45,11 @@ class Sensor extends React.Component {
 
 		this.state = {
 			isOpen: true,
-			points: [
-				[64, 20],
-				[128, 20],
-				[192, 20],
-			],
+			points: (
+				Array(10).fill().map((_, i) => (
+					[Math.floor(256 / 11 * (i + 1)), 20]
+				))
+			),
 			tempPointIndex: null,
 			tempPointDelta: null,
 		};
@@ -86,7 +86,7 @@ class Sensor extends React.Component {
 			});
 		}
 	}
-	
+
 	handleClickTrash = (event) => {
 		this.props.onRequestClose(this.props.index, event);
 	}
