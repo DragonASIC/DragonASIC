@@ -89,7 +89,7 @@ class IoArea extends React.Component {
 	}
 
 	handleChangeClock = (delta) => {
-		const newClock = Math.max(0, Math.min(this.state.clock + delta, 255));
+		const newClock = Math.max(0, Math.min(this.state.clock + delta, CLOCKS - 1));
 		if (this.state.clock !== newClock) {
 			this.setState({clock: newClock});
 		}
