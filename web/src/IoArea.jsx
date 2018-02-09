@@ -134,23 +134,49 @@ class IoArea extends React.Component {
 								animateFill={false}
 								onRequestClose={this.handleRequestCloseTooltip}
 								html={
-									<div styleName="sensor-modal">
+									<div styleName="sensor-modal">									
 										<div styleName="modal-item">
 											<div styleName="modal-head-area">
-												<div styleName="modal-head">Examples</div>
+												<div styleName="modal-head">On-chip Sensors</div>
 											</div>
 											<div styleName="modal-list">
 												<ModalListItem
 													onClick={this.handleClickModalListItem}
 													direction="in"
 												>
-													GPIO in
+													Temperature (Input)
+												</ModalListItem>
+												<ModalListItem
+													onClick={this.handleClickModalListItem}
+													direction="in"
+												>
+													Illuminance (Input)
+												</ModalListItem>
+											</div>
+										</div>	
+										<div styleName="modal-item">
+										
+											<div styleName="modal-head-area">
+												<div styleName="modal-head">General I/O for External Sensor</div>
+											</div>
+											<div styleName="modal-list">
+												<ModalListItem
+													onClick={this.handleClickModalListItem}
+													direction="in"
+												>
+													GPIO Input
 												</ModalListItem>
 												<ModalListItem
 													onClick={this.handleClickModalListItem}
 													direction="out"
 												>
-													GPIO out
+													GPIO Output
+												</ModalListItem>
+												<ModalListItem
+													onClick={this.handleClickModalListItem}
+													directian="in"
+												>
+													SPI Serial Input
 												</ModalListItem>
 												<ModalListItem
 													onClick={this.handleClickModalListItem}
@@ -160,23 +186,25 @@ class IoArea extends React.Component {
 												</ModalListItem>
 											</div>
 										</div>
-										{['Automotive', 'Electric', 'Optical', 'Pressure', 'Serial'].map((item) => (
-											<div key={item} styleName="modal-item">
-												<div styleName="modal-head-area">
-													<div styleName="modal-head">{item}</div>
-												</div>
-												<div styleName="modal-list">
-													{Array(5).fill().map((_, index) => (
-														<ModalListItem
-															key={index}
-															onClick={this.handleClickModalListItem}
-														>
-															xxxxx
-														</ModalListItem>
-													))}
-												</div>
+										<div styleName="modal-item">
+											<div styleName="modal-head-area">
+												<div styleName="modal-head">Signal converters</div>
 											</div>
-										))}
+											<div styleName="modal-list">
+												<ModalListItem
+													onClick={this.handleClickModalListItem}
+													direction="in"
+												>
+													AD Converter (Input)
+												</ModalListItem>
+												<ModalListItem
+													onClick={this.handleClickModalListItem}
+													direction="out"
+												>
+													DA Converter (Output)
+												</ModalListItem>
+											</div>
+										</div>
 									</div>
 								}
 							>
