@@ -134,7 +134,7 @@ class IoArea extends React.Component {
 								animateFill={false}
 								onRequestClose={this.handleRequestCloseTooltip}
 								html={
-									<div styleName="sensor-modal">									
+									<div styleName="sensor-modal" style={{ width: 400 }}>									
 										<div styleName="modal-item">
 											<div styleName="modal-head-area">
 												<div styleName="modal-head">On-chip Sensors</div>
