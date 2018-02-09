@@ -162,13 +162,13 @@ app.use(post('/simulate', async (context) => {
 		image: 'compiler',
 		before: async ({tmpPath}) => {
 			await fs.writeFile(path.join(tmpPath, 'code.c'), stripIndent`
-				#define OGPIO0 *((unsigned char *)0x88)
-				#define TRIS0 *((unsigned char *)0x89)
-				#define IGPIO0 *((unsigned char *)0x8A)
-				#define OGPIO1 *((unsigned char *)0x8C)
-				#define TRIS1 *((unsigned char *)0x8D)
-				#define OGPIO2 *((unsigned char *)0x90)
-				#define TRIS2 *((unsigned char *)0x91)
+				#define OGPIO0 (*((unsigned char *)0x88))
+				#define TRIS0 (*((unsigned char *)0x89))
+				#define IGPIO0 (*((unsigned char *)0x8A))
+				#define OGPIO1 (*((unsigned char *)0x8C))
+				#define TRIS1 (*((unsigned char *)0x8D))
+				#define OGPIO2 (*((unsigned char *)0x90))
+				#define TRIS2 (*((unsigned char *)0x91))
 				#define INPUT 0xFF
 				#define OUTPUT 0x00
 				
