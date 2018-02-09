@@ -246,7 +246,9 @@ app.use(post('/simulate', async (context) => {
 	for (const [key, value] of Object.entries(data)) {
 		if (key.startsWith('GPIO')) {
 			data[key] = value.map((pins) => (
-				parseInt(pins.reverse().map(([, pin]) => pin).join(''), 2)
+				pins.every((pin) => pin.startsWith('O'))
+					? parseInt(pins.reverse().map(([, pin]) => pin).join(''), 2)
+					: 0
 			));
 		}
 	}
